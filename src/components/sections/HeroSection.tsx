@@ -5,36 +5,19 @@ import { portfolioData } from "@/data/portfolio";
 import Typewriter from "@/components/effects/Typewriter";
 import ResumeModal from "@/components/ResumeModal";
 
-// Simple chatbot responses based on keywords
-const getChatResponse = (input: string): string => {
-  const lowerInput = input.toLowerCase();
-  
-  if (lowerInput.includes('hello') || lowerInput.includes('hi') || lowerInput.includes('hey')) {
-    return `Hello! I'm Samuel's portfolio assistant. Ask me about his skills, projects, or experience!`;
+// Call Gemini API for chat responses
+const callGeminiAPI = async (userMessage: string): Promise<string> => {
+  try {
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: userMessage }),
+    });
+    const data = await response.json();
+    return data.response || 'Sorry, I could not process that. Try asking about skills, projects, or experience.';
+  } catch {
+    return 'Connection error. Try again or check out the sections below!';
   }
-  if (lowerInput.includes('skill') || lowerInput.includes('tech') || lowerInput.includes('stack')) {
-    return `Samuel specializes in: Python, PyTorch, LangChain, FastAPI, Docker, AWS, and GCP. He's focused on AI/ML and data engineering.`;
-  }
-  if (lowerInput.includes('project')) {
-    return `Samuel has built AI agents, ML pipelines, trading bots, and computer vision systems. Check out the Projects section below!`;
-  }
-  if (lowerInput.includes('experience') || lowerInput.includes('work')) {
-    return `Samuel has experience as an AI Engineer and ML Intern, working on LLM systems, data pipelines, and autonomous agents.`;
-  }
-  if (lowerInput.includes('contact') || lowerInput.includes('email') || lowerInput.includes('reach')) {
-    return `You can reach Samuel at ${portfolioData.personal.email} or connect on LinkedIn and GitHub.`;
-  }
-  if (lowerInput.includes('education') || lowerInput.includes('study') || lowerInput.includes('school')) {
-    return `Samuel studied ${portfolioData.education[0]?.degree || 'Computer Science'} at ${portfolioData.education[0]?.school || 'University'}.`;
-  }
-  if (lowerInput.includes('resume') || lowerInput.includes('cv')) {
-    return `Click "View Resume" above to see Samuel's full resume, or download it directly!`;
-  }
-  if (lowerInput.includes('who') || lowerInput.includes('about')) {
-    return `Samuel is a Data Engineer focused on AI/ML, building intelligent agents and scalable data systems.`;
-  }
-  
-  return `I can help you learn about Samuel's skills, projects, experience, or contact info. What would you like to know?`;
 };
 
 const HeroSection = () => {
@@ -43,19 +26,19 @@ const HeroSection = () => {
   const [chatResponse, setChatResponse] = useState('');
   const [isTyping, setIsTyping] = useState(false);
 
-  const handleChatSubmit = (e: React.FormEvent) => {
+  const handleChatSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!chatInput.trim()) return;
     
+    const userMessage = chatInput.trim();
+    setChatInput('');
     setIsTyping(true);
     setChatResponse('');
     
-    // Simulate typing delay
-    setTimeout(() => {
-      setChatResponse(getChatResponse(chatInput));
-      setIsTyping(false);
-      setChatInput('');
-    }, 500);
+    // Call Gemini API
+    const response = await callGeminiAPI(userMessage);
+    setChatResponse(response);
+    setIsTyping(false);
   };
 
   return (
