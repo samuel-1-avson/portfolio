@@ -99,7 +99,23 @@ const Chatbot: React.FC = () => {
     scrollToBottom();
   }, [messages]);
 
-  const handleSend = () => {
+  const [isTyping, setIsTyping] = useState(false);
+
+  const callGeminiAPI = async (userMessage: string): Promise<string> => {
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userMessage }),
+      });
+      const data = await response.json();
+      return data.response || 'RESPONSE_ERROR. TRY AGAIN.';
+    } catch {
+      return 'CONNECTION_ERROR. AI OFFLINE. TRY BASIC COMMANDS: whoami, projects, skills, contact';
+    }
+  };
+
+  const handleSend = async () => {
     if (!input.trim()) return;
 
     const userMsg: Message = { id: Date.now().toString(), sender: 'user', text: input };
@@ -115,19 +131,19 @@ const Chatbot: React.FC = () => {
       gamificationContext.trackCommand(command);
     }
 
-    setTimeout(() => {
-      let botResponse = "COMMAND_NOT_RECOGNIZED. TRY 'HELP' FOR AVAILABLE COMMANDS.";
-      const lowerInput = input.toLowerCase();
-      
-      // Check secret commands first
-      const secretKey = Object.keys(SECRET_COMMANDS).find(key => lowerInput.includes(key));
-      if (secretKey) {
-        botResponse = SECRET_COMMANDS[secretKey];
-        if (gamificationContext) {
-          gamificationContext.unlockAchievement('secret_command');
-        }
-      } else if (lowerInput.includes('who') || lowerInput.includes('about') || lowerInput === 'whoami') {
-        botResponse = `
+    // Check for static commands first
+    const lowerInput = input.toLowerCase();
+    let botResponse: string | null = null;
+    
+    // Check secret commands first
+    const secretKey = Object.keys(SECRET_COMMANDS).find(key => lowerInput.includes(key));
+    if (secretKey) {
+      botResponse = SECRET_COMMANDS[secretKey];
+      if (gamificationContext) {
+        gamificationContext.unlockAchievement('secret_command');
+      }
+    } else if (lowerInput.includes('who') || lowerInput.includes('about') || lowerInput === 'whoami') {
+      botResponse = `
 ┌─ USER_PROFILE ─────────────────────────────────
 │ NAME: ${portfolioData.personal.name}
 │ ROLE: ${portfolioData.personal.tagline}
@@ -135,20 +151,20 @@ const Chatbot: React.FC = () => {
 ├─ BIO ──────────────────────────────────────────
 │ ${portfolioData.personal.bio}
 └────────────────────────────────────────────────
-        `;
-      } else if (lowerInput.includes('project') || lowerInput.includes('work') || lowerInput.includes('built')) {
-        const projectList = portfolioData.projects.map((p, i) => 
-          `  ${i + 1}. ${p.title}\n     └─ ${p.tech.slice(0, 3).join(', ')}`
-        ).join('\n');
-        botResponse = `
+      `;
+    } else if (lowerInput.includes('project') || lowerInput.includes('work') || lowerInput.includes('built')) {
+      const projectList = portfolioData.projects.map((p, i) => 
+        `  ${i + 1}. ${p.title}\n     └─ ${p.tech.slice(0, 3).join(', ')}`
+      ).join('\n');
+      botResponse = `
 ┌─ PROJECT_LIST ─────────────────────────────────
 ${projectList}
 ├────────────────────────────────────────────────
 │ Type project name for details
 └────────────────────────────────────────────────
-        `;
-      } else if (lowerInput.includes('skill') || lowerInput.includes('stack') || lowerInput.includes('tech')) {
-        botResponse = `
+      `;
+    } else if (lowerInput.includes('skill') || lowerInput.includes('stack') || lowerInput.includes('tech')) {
+      botResponse = `
 ┌─ TECHNICAL_STACK ──────────────────────────────
 │ LANGUAGES: Python, TypeScript, Solidity, SQL
 │ ML/AI: PyTorch, TensorFlow, OpenAI, LangChain
@@ -160,19 +176,19 @@ ${projectList}
 │ ▸ Data Science & Analytics
 │ ▸ IoT & Embedded Systems
 └────────────────────────────────────────────────
-        `;
-      } else if (lowerInput.includes('contact') || lowerInput.includes('email') || lowerInput.includes('connect')) {
-        botResponse = `
+      `;
+    } else if (lowerInput.includes('contact') || lowerInput.includes('email') || lowerInput.includes('connect')) {
+      botResponse = `
 ┌─ COMM_CHANNELS ────────────────────────────────
-│ 📧 EMAIL: ${portfolioData.personal.email}
-│ 🐙 GITHUB: ${portfolioData.socials.github}
-│ 💼 LINKEDIN: ${portfolioData.socials.linkedin}
+│ EMAIL: ${portfolioData.personal.email}
+│ GITHUB: ${portfolioData.socials.github}
+│ LINKEDIN: ${portfolioData.socials.linkedin}
 ├────────────────────────────────────────────────
 │ Response time: Usually within 24 hours
 └────────────────────────────────────────────────
-        `;
-      } else if (lowerInput === 'help' || lowerInput === '?') {
-        botResponse = `
+      `;
+    } else if (lowerInput === 'help' || lowerInput === '?') {
+      botResponse = `
 ┌─ AVAILABLE_COMMANDS ───────────────────────────
 │ whoami    - Display user profile
 │ projects  - List all projects
@@ -180,17 +196,19 @@ ${projectList}
 │ contact   - Get contact information
 │ clear     - Clear terminal
 │ help      - Show this message
+├─ AI_MODE ──────────────────────────────────────
+│ Ask any question! Powered by Gemini AI.
+│ Try: "What makes you a good AI Engineer?"
 ├─ HINTS ────────────────────────────────────────
-│ 🔮 There are secret commands to discover...
-│ 🎮 Try the Konami code on the page!
+│ There are secret commands to discover...
 └────────────────────────────────────────────────
-        `;
-      } else if (lowerInput === 'clear' || lowerInput === 'cls') {
-        setMessages([{ id: Date.now().toString(), sender: 'bot', text: "TERMINAL_CLEARED. READY FOR INPUT..." }]);
-        return;
-      } else if (lowerInput.includes('experience') || lowerInput.includes('cv') || lowerInput.includes('resume')) {
-        const exp = portfolioData.cv[0];
-        botResponse = `
+      `;
+    } else if (lowerInput === 'clear' || lowerInput === 'cls') {
+      setMessages([{ id: Date.now().toString(), sender: 'bot', text: "TERMINAL_CLEARED. READY FOR INPUT..." }]);
+      return;
+    } else if (lowerInput.includes('experience') || lowerInput.includes('cv') || lowerInput.includes('resume')) {
+      const exp = portfolioData.cv[0];
+      botResponse = `
 ┌─ CURRENT_POSITION ─────────────────────────────
 │ ROLE: ${exp.role}
 │ AT: ${exp.company}
@@ -198,10 +216,11 @@ ${projectList}
 ├─ DESCRIPTION ──────────────────────────────────
 │ ${exp.description}
 └────────────────────────────────────────────────
-        `;
-      }
+      `;
+    }
 
-      // Check for specific project names
+    // Check for specific project names
+    if (!botResponse) {
       portfolioData.projects.forEach(project => {
         if (lowerInput.includes(project.title.toLowerCase().split(' ')[0].toLowerCase())) {
           botResponse = `
@@ -215,14 +234,21 @@ ${projectList}
           `;
         }
       });
+    }
 
-      setMessages(prev => [...prev, { 
-        id: (Date.now() + 1).toString(), 
-        sender: 'bot', 
-        text: botResponse,
-        isHtml: false 
-      }]);
-    }, 400);
+    // If no static response, call Gemini AI
+    if (!botResponse) {
+      setIsTyping(true);
+      botResponse = await callGeminiAPI(input);
+      setIsTyping(false);
+    }
+
+    setMessages(prev => [...prev, { 
+      id: (Date.now() + 1).toString(), 
+      sender: 'bot', 
+      text: botResponse!, // Guaranteed non-null after Gemini fallback
+      isHtml: false 
+    }]);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -271,6 +297,11 @@ ${projectList}
             )}
           </div>
         ))}
+        {isTyping && (
+          <div className="text-[var(--terminal-green)] text-xs animate-pulse">
+            GEMINI_AI: Processing...
+          </div>
+        )}
         <div ref={messagesEndRef} />
       </div>
 
