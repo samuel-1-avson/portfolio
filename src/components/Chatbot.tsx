@@ -118,21 +118,21 @@ const Chatbot: React.FC = () => {
   const handleSend = async () => {
     if (!input.trim()) return;
 
-    const userMsg: Message = { id: Date.now().toString(), sender: 'user', text: input };
+    const userMessage = input.trim(); // Save the message before clearing
+    const userMsg: Message = { id: Date.now().toString(), sender: 'user', text: userMessage };
     setMessages(prev => [...prev, userMsg]);
-    setCommandHistory(prev => [...prev, input]);
+    setCommandHistory(prev => [...prev, userMessage]);
     setHistoryIndex(-1);
     
-    const command = input.toLowerCase().trim();
-    setInput('');
+    const lowerInput = userMessage.toLowerCase();
+    setInput(''); // Clear input after saving
 
     // Track command for gamification
     if (gamificationContext) {
-      gamificationContext.trackCommand(command);
+      gamificationContext.trackCommand(lowerInput);
     }
 
     // Check for static commands first
-    const lowerInput = input.toLowerCase();
     let botResponse: string | null = null;
     
     // Check secret commands first
@@ -239,7 +239,7 @@ ${projectList}
     // If no static response, call Gemini AI
     if (!botResponse) {
       setIsTyping(true);
-      botResponse = await callGeminiAPI(input);
+      botResponse = await callGeminiAPI(userMessage);
       setIsTyping(false);
     }
 
