@@ -16,7 +16,7 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Retro Portfolio",
+  title: "Samuel Maxwell Obeng Avornyoh",
   description: "A minimal retro portfolio website.",
 };
 

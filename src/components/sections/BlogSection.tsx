@@ -11,6 +11,7 @@ const blogPosts = [
     tags: ["#computerscience", "#databases", "#digitalfingerprinting"],
     url: "https://www.researchgate.net/publication/221210725_Video_fingerprinting_for_copy_identification_From_research_to_industry_applications",
     githubUrl: "https://github.com/samuel-1-avson/Video-Fingerprinting-Digital",
+    summary: "Video fingerprinting works by extracting characteristic features from a video file to create a compact content signature, or 'fingerprint'. Unlike cryptographic hashes (like MD5) that change completely with a single bit alteration, video fingerprints are perceptually robust—meaning they remain recognizable even after the video undergoes compression, resizing, format conversion, or minor editing.\n\nKey components include:\n1. **Feature Extraction**: Algorithms analyze frames for color histograms, motion vectors, and interest points.\n2. **Signature Generation**: These features are condensed into a unique identifier.\n3. **Matching**: The system compares this fingerprint against a database to identify copyright infringement or duplicate content with high accuracy.",
   },
   {
     title: "CAP Theorem",
