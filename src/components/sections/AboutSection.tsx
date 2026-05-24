@@ -23,28 +23,28 @@ const expertiseCards = [
 
 const skillCategories = [
   {
-    title: 'CORE COMPETENCIES',
-    skills: ['Machine Learning', 'Data Engineering', 'LLOps', 'Agentic AI Systems', 'Robotics'],
+    title: 'TECHNICAL SKILLS',
+    skills: ['Data Engineering', 'AI Systems', 'MLOps', 'Blockchain', 'Machine Learning', 'Embedded System Design', 'Networking', 'Game Development', 'Data Visualization'],
   },
   {
-    title: 'LANGUAGES',
-    skills: ['Python', 'C++', 'SQL', 'TypeScript', 'JavaScript', 'Solidity', 'Bash'],
+    title: 'PROGRAMMING LANGUAGES',
+    skills: ['Python', 'Rust', 'JavaScript/TypeScript', 'SQL', 'Bash', 'Solidity', 'Go', 'C/C++'],
   },
   {
-    title: 'AI & ML FRAMEWORKS',
-    skills: ['PyTorch', 'LangChain', 'CrewAI', 'MLflow', 'DVC', 'Weights & Biases'],
+    title: 'AI/ML FRAMEWORKS',
+    skills: ['PyTorch', 'scikit-learn', 'LangChain', 'CrewAI', 'MLflow', 'RAG', 'Vector Databases'],
   },
   {
-    title: 'CLOUD & INFRASTRUCTURE',
-    skills: ['AWS', 'Google Cloud Platform (GCP)', 'Kubernetes', 'Docker'],
+    title: 'TOOLS & TECHNOLOGIES',
+    skills: ['Google Cloud Platform', 'AWS', 'Docker', 'Kubernetes', 'Git/GitHub', 'LLMs', 'ANNOY', 'Chroma', 'Prometheus/Grafana'],
   },
   {
-    title: 'BACKEND & DATABASES',
-    skills: ['FastAPI', 'Express.js', 'Next.js', 'Redis', 'Vector Databases (Chroma)'],
+    title: 'BACKEND SERVICES & DATABASES',
+    skills: ['FastAPI', 'Express.js', 'Axum/Rust', 'Redis', 'PostgreSQL/Supabase', 'Neo4j', 'RabbitMQ', 'Firebase'],
   },
   {
     title: 'SOFT SKILLS',
-    skills: ['Problem-Solving', 'Adaptability', 'Effective Communication', 'Collaboration', 'Leadership'],
+    skills: ['Adaptability', 'Problem-solving', 'Effective Communication', 'Collaboration', 'Leadership', 'Technical Documentation'],
   },
 ];
 

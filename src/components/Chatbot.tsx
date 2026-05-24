@@ -166,15 +166,15 @@ ${projectList}
     } else if (lowerInput.includes('skill') || lowerInput.includes('stack') || lowerInput.includes('tech')) {
       botResponse = `
 ┌─ TECHNICAL_STACK ──────────────────────────────
-│ LANGUAGES: Python, TypeScript, Solidity, SQL
-│ ML/AI: PyTorch, TensorFlow, OpenAI, LangChain
-│ WEB: Next.js, React, Node.js, Web3
-│ INFRA: Docker, GCP, Kubernetes
+│ LANGUAGES: Python, Rust, TS/JS, SQL, Solidity, Go, C/C++
+│ ML/AI: PyTorch, scikit-learn, LangChain, CrewAI, MLflow
+│ TOOLS/INFRA: GCP, AWS, Docker, Kubernetes, Git/GitHub
+│ BACKEND/DB: FastAPI, Express.js, Axum, Redis, Supabase
 ├─ EXPERTISE_AREAS ──────────────────────────────
-│ ▸ AI/ML Engineering
-│ ▸ Blockchain Development
-│ ▸ Data Science & Analytics
-│ ▸ IoT & Embedded Systems
+│ ▸ AI Systems & MLOps
+│ ▸ Data Engineering & Analytics
+│ ▸ Blockchain & dApps
+│ ▸ Embedded System Design
 └────────────────────────────────────────────────
       `;
     } else if (lowerInput.includes('contact') || lowerInput.includes('email') || lowerInput.includes('connect')) {

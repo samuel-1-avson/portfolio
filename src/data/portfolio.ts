@@ -49,8 +49,8 @@ export interface PortfolioData {
 export const portfolioData: PortfolioData = {
   personal: {
     name: "Samuel Maxwell Obeng Avornyoh",
-    tagline: "AI Engineer | Blockchain Dev | Embedded Systems",
-    bio: "I specialize in building intelligent agents, architecting embedded systems, and developing secure blockchain solutions. My work bridges the gap between advanced AI research, hardware design, and decentralized technologies.",
+    tagline: "AI/ML Engineer | Full-Stack Developer | Embedded Systems & Blockchain",
+    bio: "AI/ML Engineer with over 4 years of experience building machine learning models, AI systems, reliable data pipelines, and embedded-system design tools. Skilled in bridging the gap between advanced AI agents, full-stack web applications, and secure blockchain technologies.",
     location: "Ghana",
     phone: "+233547244783",
     email: "samuelavson360@gmail.com",
@@ -61,43 +61,99 @@ export const portfolioData: PortfolioData = {
     email: "samuelavson360@gmail.com",
   },
   skills: {
-    technical: ["Data Engineering", "Prompt Engineering", "Blockchain", "Machine Learning", "Automation", "IoT Engineering", "Game Dev"],
-    tools: ["Python", "SQL", "GCP", "Docker", "LLMs", "Solidity", "ANNOY Vector DB", "Bash"],
-    soft: ["Adaptability", "Problem-solving", "Leadership", "Communication"],
+    technical: [
+      "Data Engineering",
+      "AI Systems",
+      "MLOps",
+      "Blockchain",
+      "Machine Learning",
+      "Embedded System Design",
+      "Networking",
+      "Game Development",
+      "Data Visualization"
+    ],
+    tools: [
+      "Python",
+      "Rust",
+      "JavaScript/TypeScript",
+      "SQL",
+      "Bash",
+      "Solidity",
+      "Go",
+      "C/C++",
+      "FastAPI",
+      "Express.js",
+      "Axum/Rust",
+      "Redis",
+      "PostgreSQL/Supabase",
+      "Neo4j",
+      "RabbitMQ",
+      "Firebase",
+      "PyTorch",
+      "scikit-learn",
+      "LangChain",
+      "CrewAI",
+      "MLflow",
+      "RAG",
+      "Vector Databases",
+      "GCP",
+      "AWS",
+      "Docker",
+      "Kubernetes",
+      "Git/GitHub",
+      "LLMs",
+      "ANNOY",
+      "Chroma",
+      "Prometheus/Grafana"
+    ],
+    soft: [
+      "Adaptability",
+      "Problem-solving",
+      "Effective Communication",
+      "Collaboration",
+      "Leadership",
+      "Technical Documentation"
+    ],
     languages: ["English", "Asante-Twi"]
   },
   education: [
     {
       degree: "BSc. Computer Science and Engineering",
-      school: "University of Mines and Technology",
-      period: "Expected Nov 2025",
-      details: "Second Upper Class. Courses: AI, Data Science, Robotics, Linear Algebra."
+      school: "University of Mines and Technology, Tarkwa Ghana",
+      period: "Nov 2025",
+      details: "Academic Standing: Second Upper | CWA: 75.66. Relevant Coursework: Artificial Intelligence, Data Structures and Algorithms, Database Systems, Data Science Fundamentals, Probability and Statistics, Embedded System Design, Linear Algebra, Robotics"
     }
   ],
   cv: [
     {
-      role: "AI/ML Engineer NSP",
-      company: "Really Great Tech",
-      period: "Nov 2025 - Present",
-      description: "Serving as an AI/Machine Learning Engineer for National Service, contributing to advanced tech solutions.",
+      role: "Full-Stack Developer",
+      company: "TonyCold Store Management System",
+      period: "May 2026 - Present",
+      description: "• Developed a business management system for a cold store dealing in frozen meat, fish, and related products.\n• Designed modules for product records, inventory tracking, sales/POS operations, stock movement, expense tracking, and business reporting.\n• Improved operational visibility by organizing product categories, pricing, sales summaries, and admin workflows for day-to-day store management."
     },
     {
-      role: "Blockchain Game Developer",
-      company: "Nexus Playground / Community",
-      period: "May 2025 - Present", 
-      description: "Created an action-packed vertical-scrolling roguelike game for the Nexus Playground Contest. Active Web3/Forex facilitator on LinkedIn and community groups.",
+      role: "National Service Personnel / AI & Data Engineer",
+      company: "Really Great Tech",
+      period: "Dec. 2025 – Present",
+      description: "• Built and maintained an AI/Data training repository covering data analytics, SQL, dashboards, supervised ML, deployment, MLOps, LLM fundamentals, LangChain, RAG, and model evaluation.\n• Designed weekly workflows and milestone projects using Git/GitHub branches, pull requests, Python, Jupyter/VS Code, scikit-learn, SQL, and Google Looker Studio.\n• Developed learning materials and project documentation for business insights, ML microservices, and telecom policy assistant use cases."
+    },
+    {
+      role: "Blockchain / Gaming / AI Project Developer",
+      company: "Independent Projects",
+      period: "May 2025 – Present",
+      description: "• Built game and blockchain prototypes including arcade-style games, Web3/crypto experiments, and AI-assisted development workflows.\n• Facilitated Web3, forex, and AI learning discussions across WhatsApp and LinkedIn communities.\n• Continued building portfolio projects in AI agents, embedded systems, trading systems, and full-stack web platforms."
     },
     {
       role: "Machine Learning Intern",
       company: "Makersplace",
-      period: "Sep 2023 - Jan 2024",
-      description: "Created a generative AI model for robotic facilitators and trained it on guidebooks. Integrated AI agents with Telegram/WhatsApp using FastAPI. Developed ML models for financial forecasting and created visual dashboards for agent analytics.",
+      period: "Sep. 2023 – Jan. 2024",
+      description: "• Created a web-based generative AI assistant to support robotic facilitators in course delivery using a facilitator guidebook as a knowledge source for contextual responses.\n• Built visual charts and graphs to communicate AI-agent activities, performance, and decision insights to non-technical stakeholders.\n• Developed machine-learning models for financial-market forecasting and trading-strategy research using predictive algorithms and market indicators.\n• Integrated AI agents with Telegram and WhatsApp using FastAPI, Telegram libraries, and WhatsApp automation tools."
     }
   ],
   projects: [
     {
-      title: "NeuroBench IDE",
-      description: "Professional-grade embedded systems IDE built with Tauri (Rust + SolidJS). Features visual FSM design with drag-and-drop, automated multi-language code generation (C, C++, Rust, Ada, Assembly), 90+ IPC commands, advanced terminal with 30+ embedded commands, real-time performance monitoring, and AI-assisted development with Gemini integration.",
+      title: "FSM Designer / NeuroBench",
+      description: "A graphical finite-state-machine editor and professional-grade embedded systems IDE built with Tauri (Rust + SolidJS). Features visual FSM design with cycle-accurate simulation, templates, C/Python code export, AI-assisted debugging, 90+ IPC commands, and real-time performance monitoring.",
       link: "https://github.com/samuel-1-avson/Neurostate",
       tech: ["Rust", "Tauri", "SolidJS", "TypeScript", "STM32", "probe-rs"],
       details: `
@@ -157,37 +213,56 @@ The background scheduler handles parallel execution of AI reasoning, compilation
 `
     },
     {
-      title: "Music Companion",
-      description: "AI-powered music platform with Gemini AI discovery, multi-provider search (YouTube, Spotify, Last.fm), real-time WebSocket collaboration, and offline capabilities.",
+      title: "AI-powered Music Companion",
+      description: "AI-powered music companion platform with React/TypeScript, Express.js, Supabase, Gemini, Spotify, YouTube/yt-dlp, Telegram Bot integration, and real-time WebSocket features.",
       link: "https://github.com/samuel-1-avson/music-companion",
-      tech: ["TypeScript", "React", "Gemini AI", "WebSocket", "Supabase"],
+      tech: ["React", "TypeScript", "Express.js", "Supabase", "Gemini AI", "WebSocket", "Telegram Bot"],
     },
     {
-      title: "Sign Language Detection",
-      description: "Real-time sign language recognition using a Hybrid CNN/LSTM architecture for accurate gesture classification and translation.",
-      link: "https://github.com/samuel-1-avson/Sign-Language-Detection-Hybrid-CNN-LSTM",
-      tech: ["Python", "TensorFlow", "CNN", "LSTM", "OpenCV"],
+      title: "Chain Registry Ecosystem",
+      description: "Explored a Chain Registry Ecosystem project focused on registry integrity, blockchain metadata management, reproducible verification, governance, auditability, and supply-chain security.",
+      link: "#",
+      tech: ["Solidity", "Rust", "Blockchain", "Metadata", "Security"],
     },
     {
-      title: "Sound Anomaly Detection",
-      description: "Audio anomaly detection system for industrial applications. Identifies unusual sounds in machinery for predictive maintenance.",
-      link: "https://github.com/samuel-1-avson/Sound-Anomaly-Detection-SAD-",
-      tech: ["Python", "Deep Learning", "Audio Processing", "Django"],
+      title: "AI Merchant Assistant",
+      description: "Built AI Merchant Assistant, a Rust/Next.js/Supabase platform for voice-based sales recording, receipt OCR, inventory tracking, real-time analytics, forecasting, and smart merchant alerts.",
+      link: "#",
+      tech: ["Rust", "Next.js", "Supabase", "OCR", "Analytics", "AI"],
     },
     {
       title: "Healthcare No-Show Prediction",
-      description: "ML system predicting patient appointment no-shows to reduce healthcare losses. Features hyperparameter tuning, Streamlit dashboard, and comprehensive data pipelines.",
+      description: "Built a healthcare no-show prediction system using FastAPI, React, MLflow, Redis, RabbitMQ, PostgreSQL, and Prometheus/Grafana monitoring.",
       link: "https://github.com/samuel-1-avson/healthcare-appointments",
-      tech: ["Python", "Scikit-learn", "Streamlit", "Jupyter", "Nginx"],
+      tech: ["FastAPI", "React", "MLflow", "Redis", "RabbitMQ", "PostgreSQL", "Prometheus", "Grafana"],
     },
     {
-      title: "Industrial Fault Detection",
-      description: "IoT system using Raspberry Pi, Arduino, and tilt sensors to analyze machinery data in real-time for anomaly detection.",
+      title: "Proxy Marketplace",
+      description: "Designed proxy marketplace and recommendation-feed algorithm prototypes involving networking, marketplace architecture, usage-based billing, retrieval, ranking, scoring, and personalization.",
       link: "#",
-      tech: ["Raspberry Pi", "Arduino", "Python", "Sensors"],
+      tech: ["Go", "Python", "Networking", "Architecture", "Recommendation Alg"],
     },
+    {
+      title: "Crypto POS Payment System",
+      description: "Designed a Crypto POS payment system concept for merchants to accept crypto payments, support stablecoins and major assets, verify transactions, generate receipts, and manage fiat or crypto settlement workflows.",
+      link: "#",
+      tech: ["Solidity", "React", "Web3", "Smart Contracts", "Payments"],
+    },
+    {
+      title: "Sports Odds Arbitrage",
+      description: "Developed sports odds arbitrage analytics tools with Python scraping, Redis caching, fuzzy/NLP event matching, alerting, rate limiting, and reliability-focused fallback handling.",
+      link: "#",
+      tech: ["Python", "Redis", "Scraping", "NLP", "Fuzzy Matching", "Rate Limiting"],
+    },
+    {
+      title: "Sign Language Detection",
+      description: "Designed a hybrid CNN-LSTM sign-language detection pipeline using video/image data and pose-based features.",
+      link: "https://github.com/samuel-1-avson/Sign-Language-Detection-Hybrid-CNN-LSTM",
+      tech: ["Python", "TensorFlow", "CNN", "LSTM", "OpenCV"],
+    }
   ],
   awards: [
+    "Google DeepMind - Vibe Code Hackathon Winner (Kaggle/AI Studio: Top 50 Project out of 4,097 submissions)",
     "First Place: CodeAfrique & Art Exhibition Robotics Competition",
     "IT President: Kumasi Anglican Senior High School (Led 70+ students in programming)",
   ]

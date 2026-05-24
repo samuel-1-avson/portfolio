@@ -44,7 +44,7 @@ const ExperienceSection = () => {
                 </p>
                 
                 {/* Description */}
-                <p className="text-sm text-[var(--retro-fg)]/70 leading-relaxed">
+                <p className="text-sm text-[var(--retro-fg)]/70 leading-relaxed whitespace-pre-line">
                   {exp.description}
                 </p>
               </div>
