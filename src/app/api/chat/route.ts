@@ -125,13 +125,14 @@ export async function POST(request: NextRequest) {
   dailyRequestCount += 1;
 
   try {
-    const ai = new GoogleGenAI({
-      apiKey,
-      httpOptions: {
-        timeout: 10_000,
-        retryOptions: { attempts: 1 },
-      },
-    });
+    const httpOptions = { timeout: 10_000, retryOptions: { attempts: 1 } };
+    const ai = process.env.GEMINI_BACKEND === "vertex"
+      ? new GoogleGenAI({
+        vertexai: true,
+        apiKey,
+        httpOptions,
+      })
+      : new GoogleGenAI({ apiKey, httpOptions });
     const response = await ai.models.generateContent({
       model: process.env.GEMINI_MODEL || "gemini-2.5-flash",
       contents: `Visitor question: ${validation.message}`,
