@@ -1,185 +1,30 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { portfolioData, type Project } from "@/data/portfolio";
 
-interface ProjectModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  project: {
-    title: string;
-    description: string;
-    link: string;
-    tech: string[];
-    details?: string;
-  } | null;
-}
+interface ProjectModalProps { isOpen: boolean; onClose: () => void; project: Project | null; }
 
-const ProjectModal = ({ isOpen, onClose, project }: ProjectModalProps) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [progress, setProgress] = useState(0);
-
+export default function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
+  const closeButton = useRef<HTMLButtonElement>(null);
   useEffect(() => {
-    if (isOpen) {
-      setIsLoading(true);
-      setProgress(0);
-      
-      // Simulate loading animation
-      const interval = setInterval(() => {
-        setProgress(prev => {
-          if (prev >= 100) {
-            clearInterval(interval);
-            setTimeout(() => setIsLoading(false), 300);
-            return 100;
-          }
-          return prev + Math.random() * 25;
-        });
-      }, 60);
-
-      return () => clearInterval(interval);
-    }
-  }, [isOpen]);
-
+    if (!isOpen) return;
+    const previous = document.activeElement as HTMLElement | null;
+    const handleKey = (event: KeyboardEvent) => event.key === "Escape" && onClose();
+    document.addEventListener("keydown", handleKey); document.body.style.overflow = "hidden";
+    window.setTimeout(() => closeButton.current?.focus(), 0);
+    return () => { document.removeEventListener("keydown", handleKey); document.body.style.overflow = ""; previous?.focus(); };
+  }, [isOpen, onClose]);
   if (!isOpen || !project) return null;
-
-  // Extract repo name from GitHub URL
-  const repoName = project.link.split('/').slice(-2).join('/');
-
-  return (
-    <div 
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
-      onClick={onClose}
-    >
-      <div 
-        className="bg-[var(--retro-bg)] w-full max-w-2xl mx-4 flex flex-col font-mono animate-fadeIn"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Terminal Header */}
-        <div className="bg-[var(--retro-fg)] text-[var(--retro-bg)] px-4 py-2 flex items-center justify-between">
-          <span className="text-xs uppercase">{project.title.toUpperCase().replace(/\s+/g, '_')}.REPO</span>
-          <button 
-            onClick={onClose}
-            className="text-xs hover:opacity-70 transition-opacity"
-          >
-            [X] CLOSE
-          </button>
-        </div>
-
-        {/* Content */}
-        <div className="p-6">
-          {isLoading ? (
-            <div className="py-12 text-center">
-              <p className="text-sm text-[var(--retro-fg)] mb-2">
-                [ LOADING PROJECT DATA... ]
-              </p>
-              <p className="text-xs text-green-600 mb-4">
-                fetching from github.com
-              </p>
-              
-              {/* Progress bar */}
-              <div className="w-64 h-2 border border-[var(--retro-border)] bg-transparent mx-auto mb-4">
-                <div 
-                  className="h-full bg-green-500 transition-all duration-100"
-                  style={{ width: `${Math.min(progress, 100)}%` }}
-                />
-              </div>
-              
-              <p className="text-xs text-[var(--retro-fg)]/50">
-                {Math.min(Math.round(progress), 100)}% COMPLETE
-              </p>
-            </div>
-          ) : (
-            <div>
-              {/* Project Title */}
-              <h3 className="text-2xl font-bold text-[var(--retro-fg)] mb-2">
-                {project.title}
-              </h3>
-              
-              {/* Repo URL */}
-              <p className="text-xs text-green-600 mb-6">
-                github.com/{repoName}
-              </p>
-
-              {/* Description or Rich Details */}
-              <div className="mb-6">
-                <p className="text-xs text-[var(--retro-fg)]/50 mb-2">$ cat {project.details ? 'DOCUMENTATION.md' : 'README.md'}</p>
-                
-                {project.details ? (
-                  <div className="text-sm text-[var(--retro-fg)]/80 leading-relaxed h-[40vh] overflow-y-auto pr-2 custom-scrollbar font-mono">
-                    {project.details.split('\n').map((line, i) => {
-                      // Header 1
-                      if (line.startsWith('# ')) {
-                        return <h1 key={i} className="text-xl font-bold text-green-500 mt-6 mb-3">{line.replace('# ', '')}</h1>;
-                      }
-                      // Header 2
-                      if (line.startsWith('## ')) {
-                        return <h2 key={i} className="text-lg font-bold text-[var(--retro-fg)] mt-5 mb-2 border-b border-[var(--retro-border)] pb-1">{line.replace('## ', '')}</h2>;
-                      }
-                      // Bold lines (simple check)
-                      if (line.startsWith('**') && line.endsWith('**')) {
-                        return <p key={i} className="font-bold text-[var(--retro-fg)] mt-3 mb-1">{line.replace(/\*\*/g, '')}</p>;
-                      }
-                      // List items
-                      if (line.trim().startsWith('- ')) {
-                        return (
-                          <div key={i} className="flex gap-2 mb-1 ml-2">
-                            <span className="text-green-600">•</span>
-                            <span>{line.replace('- ', '')}</span>
-                          </div>
-                        );
-                      }
-                      // Empty lines
-                      if (line.trim() === '') {
-                        return <div key={i} className="h-2" />;
-                      }
-                      // Normal text
-                      return <p key={i} className="mb-1 opacity-90">{line}</p>;
-                    })}
-                  </div>
-                ) : (
-                  <p className="text-sm text-[var(--retro-fg)]/80 leading-relaxed">
-                    {project.description}
-                  </p>
-                )}
-              </div>
-
-              {/* Tech Stack */}
-              <div className="mb-6">
-                <p className="text-xs text-[var(--retro-fg)]/50 mb-2">$ cat package.json | grep dependencies</p>
-                <div className="flex flex-wrap gap-2">
-                  {project.tech.map((t) => (
-                    <span 
-                      key={t}
-                      className="px-3 py-1 border border-[var(--retro-border)] text-xs text-[var(--retro-fg)]/80"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Actions */}
-              <div className="flex gap-4 pt-4 border-t border-[var(--retro-border)]">
-                <a 
-                  href={project.link} 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-4 py-2 bg-green-500 text-white text-sm hover:bg-green-600 transition-colors"
-                >
-                  Open in GitHub →
-                </a>
-                <button 
-                  onClick={onClose}
-                  className="px-4 py-2 border border-[var(--retro-border)] text-sm text-[var(--retro-fg)] hover:border-green-500 transition-colors"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+  const sourceAvailable = project.link !== "#";
+  return <div className="fixed inset-0 z-[60] grid place-items-end bg-black/60 p-0 backdrop-blur-sm sm:place-items-center sm:p-4" role="presentation" onMouseDown={onClose}>
+    <section role="dialog" aria-modal="true" aria-labelledby="project-dialog-title" className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-t-xl bg-[var(--retro-bg)] shadow-2xl sm:rounded-xl" onMouseDown={(event) => event.stopPropagation()}>
+      <header className="sticky top-0 flex items-center justify-between border-b border-[var(--retro-border)] bg-[var(--retro-bg)] px-5 py-4"><p className="font-mono text-xs font-bold tracking-wider text-[var(--terminal-green)]">CASE STUDY / {project.status.toUpperCase()}</p><button ref={closeButton} type="button" onClick={onClose} className="rounded-md px-3 py-2 text-sm hover:bg-[var(--retro-hover)]" aria-label="Close project details">Close ×</button></header>
+      <div className="p-5 sm:p-8"><h2 id="project-dialog-title" className="text-3xl font-bold tracking-tight text-[var(--retro-fg)]">{project.title}</h2><p className="mt-3 text-sm font-medium text-[var(--terminal-green)]">Role: {project.role}</p><p className="mt-5 text-base leading-7 text-[var(--text-muted)]">{project.description}</p>
+        {project.details && <div className="mt-8 border-t border-[var(--retro-border)] pt-6"><p className="font-mono text-xs font-bold text-[var(--text-subtle)]">SELECTED SYSTEM NOTES</p><div className="mt-3 space-y-2 text-sm leading-6 text-[var(--text-muted)]">{project.details.split("\n").filter(Boolean).slice(0, 12).map((line) => <p key={line}>{line.replace(/^#+\s?|^\*\*|\*\*$/g, "")}</p>)}</div></div>}
+        <div className="mt-8 flex flex-wrap gap-2">{project.tech.map((tech) => <span key={tech} className="rounded-full border border-[var(--retro-border)] px-3 py-1 text-xs text-[var(--text-muted)]">{tech}</span>)}</div>
+        <div className="mt-8 flex flex-wrap gap-3 border-t border-[var(--retro-border)] pt-6">{sourceAvailable && <a href={project.link} target="_blank" rel="noopener noreferrer" className="rounded-md bg-[var(--retro-fg)] px-4 py-2 text-sm font-semibold text-[var(--retro-bg)]">Open source <span aria-hidden="true">↗</span></a>}{project.demo && <a href={project.demo} target="_blank" rel="noopener noreferrer" className="rounded-md border border-[var(--retro-border)] px-4 py-2 text-sm font-semibold text-[var(--retro-fg)]">View live demo <span aria-hidden="true">↗</span></a>}{!sourceAvailable && <a href={`mailto:${portfolioData.personal.email}?subject=${encodeURIComponent(`Case study request: ${project.title}`)}`} className="rounded-md border border-[var(--retro-border)] px-4 py-2 text-sm font-semibold text-[var(--retro-fg)]">Request case study</a>}</div>
       </div>
-    </div>
-  );
-};
-
-export default ProjectModal;
+    </section>
+  </div>;
+}

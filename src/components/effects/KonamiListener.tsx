@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 
 const KONAMI_CODE = [
   'ArrowUp', 'ArrowUp', 
@@ -15,7 +15,7 @@ interface KonamiListenerProps {
 }
 
 const KonamiListener: React.FC<KonamiListenerProps> = ({ onActivate }) => {
-  const [sequence, setSequence] = useState<string[]>([]);
+  const sequenceRef = useRef<string[]>([]);
   const [activated, setActivated] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
 
@@ -51,8 +51,7 @@ const KonamiListener: React.FC<KonamiListenerProps> = ({ onActivate }) => {
       const columns = Math.floor(canvas.width / fontSize);
       const drops: number[] = Array(columns).fill(1);
       
-      let animationId: number;
-      let startTime = Date.now();
+      const startTime = Date.now();
       
       const draw = () => {
         ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
@@ -75,7 +74,7 @@ const KonamiListener: React.FC<KonamiListenerProps> = ({ onActivate }) => {
         
         // Stop after 10 seconds
         if (elapsed < 10) {
-          animationId = requestAnimationFrame(draw);
+          requestAnimationFrame(draw);
         } else {
           canvas.remove();
           document.body.classList.remove('ultra-mode');
@@ -96,16 +95,10 @@ const KonamiListener: React.FC<KonamiListenerProps> = ({ onActivate }) => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const key = e.code;
       
-      setSequence(prev => {
-        const newSequence = [...prev, key].slice(-KONAMI_CODE.length);
-        
-        // Check if sequence matches
-        if (newSequence.join(',') === KONAMI_CODE.join(',') && !activated) {
-          triggerUltraMode();
-        }
-        
-        return newSequence;
-      });
+      sequenceRef.current = [...sequenceRef.current, key].slice(-KONAMI_CODE.length);
+      if (sequenceRef.current.join(',') === KONAMI_CODE.join(',') && !activated) {
+        triggerUltraMode();
+      }
     };
 
     window.addEventListener('keydown', handleKeyDown);

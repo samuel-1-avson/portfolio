@@ -2,6 +2,16 @@
 
 import React, { useEffect, useState } from 'react';
 
+const Bar = ({ label, value, color }: { label: string; value: number; color: string }) => (
+  <div className="flex items-center gap-2 text-xs font-mono mb-2">
+    <span className="w-16 text-gray-600">{label}</span>
+    <div className="flex-1 h-3 bg-gray-200 border border-black relative">
+      <div className={`h-full ${color} transition-all duration-500`} style={{ width: `${value}%` }} />
+    </div>
+    <span className="w-8 text-right">{value}%</span>
+  </div>
+);
+
 const SystemMonitor = () => {
   const [metrics, setMetrics] = useState({
     gpuLoad: 0,
@@ -19,19 +29,6 @@ const SystemMonitor = () => {
     }, 2000);
     return () => clearInterval(interval);
   }, []);
-
-  const Bar = ({ label, value, color }: { label: string, value: number, color: string }) => (
-    <div className="flex items-center gap-2 text-xs font-mono mb-2">
-      <span className="w-16 text-gray-600">{label}</span>
-      <div className="flex-1 h-3 bg-gray-200 border border-black relative">
-        <div 
-          className={`h-full ${color} transition-all duration-500`} 
-          style={{ width: `${value}%` }}
-        />
-      </div>
-      <span className="w-8 text-right">{value}%</span>
-    </div>
-  );
 
   return (
     <div className="retro-card p-4">

@@ -24,27 +24,27 @@ const expertiseCards = [
 const skillCategories = [
   {
     title: 'TECHNICAL SKILLS',
-    skills: ['Data Engineering', 'AI Systems', 'MLOps', 'Blockchain', 'Machine Learning', 'Embedded System Design', 'Networking', 'Game Development', 'Data Visualization'],
+    skills: portfolioData.skills.technical,
   },
   {
     title: 'PROGRAMMING LANGUAGES',
-    skills: ['Python', 'Rust', 'JavaScript/TypeScript', 'SQL', 'Bash', 'Solidity', 'Go', 'C/C++'],
+    skills: portfolioData.skills.tools.slice(0, 8),
   },
   {
     title: 'AI/ML FRAMEWORKS',
-    skills: ['PyTorch', 'scikit-learn', 'LangChain', 'CrewAI', 'MLflow', 'RAG', 'Vector Databases'],
+    skills: portfolioData.skills.tools.filter((skill) => ['PyTorch', 'scikit-learn', 'LangChain', 'CrewAI', 'MLflow', 'RAG', 'Vector Databases'].includes(skill)),
   },
   {
     title: 'TOOLS & TECHNOLOGIES',
-    skills: ['Google Cloud Platform', 'AWS', 'Docker', 'Kubernetes', 'Git/GitHub', 'LLMs', 'ANNOY', 'Chroma', 'Prometheus/Grafana'],
+    skills: portfolioData.skills.tools.filter((skill) => ['GCP', 'AWS', 'Docker', 'Kubernetes', 'Git/GitHub', 'LLMs', 'ANNOY', 'Chroma', 'Prometheus/Grafana'].includes(skill)),
   },
   {
     title: 'BACKEND SERVICES & DATABASES',
-    skills: ['FastAPI', 'Express.js', 'Axum/Rust', 'Redis', 'PostgreSQL/Supabase', 'Neo4j', 'RabbitMQ', 'Firebase'],
+    skills: portfolioData.skills.tools.filter((skill) => ['FastAPI', 'Express.js', 'Axum/Rust', 'Redis', 'PostgreSQL/Supabase', 'Neo4j', 'RabbitMQ', 'Firebase'].includes(skill)),
   },
   {
     title: 'SOFT SKILLS',
-    skills: ['Adaptability', 'Problem-solving', 'Effective Communication', 'Collaboration', 'Leadership', 'Technical Documentation'],
+    skills: portfolioData.skills.soft,
   },
 ];
 
@@ -116,6 +116,21 @@ const AboutSection = () => {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+
+        <div className="mt-16 grid gap-6 border-t border-[var(--retro-border)] pt-12 md:grid-cols-[1.1fr_.9fr]">
+          <div>
+            <p className="font-mono text-xs font-bold tracking-wider text-green-600">EDUCATION</p>
+            {portfolioData.education.map((education) => <div key={education.degree} className="mt-4 rounded-lg border border-[var(--retro-border)] bg-[var(--retro-card-bg)] p-5">
+              <h3 className="font-semibold text-[var(--retro-fg)]">{education.degree}</h3>
+              <p className="mt-1 text-sm text-[var(--text-muted)]">{education.school} · {education.period}</p>
+              <p className="mt-3 text-sm leading-6 text-[var(--text-muted)]">{education.details}</p>
+            </div>)}
+          </div>
+          <div>
+            <p className="font-mono text-xs font-bold tracking-wider text-green-600">RECOGNITION & LEADERSHIP</p>
+            <ul className="mt-4 space-y-3">{portfolioData.awards.map((award) => <li key={award} className="rounded-lg border border-[var(--retro-border)] bg-[var(--retro-card-bg)] p-4 text-sm leading-6 text-[var(--text-muted)]"><span className="mr-2 text-green-600">✦</span>{award}</li>)}</ul>
           </div>
         </div>
       </div>

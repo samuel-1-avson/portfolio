@@ -7,7 +7,6 @@ import {
   saveGamificationState,
   addXP as addXPHelper,
   unlockAchievement as unlockAchievementHelper,
-  getLevelFromXP,
   getXPProgress,
   LEVEL_NAMES,
   Achievement,
@@ -35,6 +34,8 @@ export const useGamification = () => {
   return context;
 };
 
+export const useOptionalGamification = () => useContext(GamificationContext);
+
 interface GamificationProviderProps {
   children: ReactNode;
 }
@@ -45,55 +46,48 @@ export const GamificationProvider: React.FC<GamificationProviderProps> = ({ chil
 
   // Initialize and check for first visit / return visitor
   useEffect(() => {
-    const currentState = loadGamificationState();
-    const now = new Date();
-    
-    // Increment visit count
-    const newVisitCount = currentState.visitCount + 1;
-    currentState.visitCount = newVisitCount;
-    
-    // Check for first visit achievement
-    if (newVisitCount === 1) {
-      const result = unlockAchievementHelper(currentState, 'first_visit');
-      if (result.achievement) {
-        setState(result.newState);
-        setPendingToast({ type: 'achievement', data: result.achievement });
-        saveGamificationState(result.newState);
-        return;
-      }
-    }
-    
-    // Check for return visitor
-    if (currentState.lastVisit && newVisitCount > 1) {
-      const lastVisit = new Date(currentState.lastVisit);
-      const hoursSinceLastVisit = (now.getTime() - lastVisit.getTime()) / (1000 * 60 * 60);
-      
-      if (hoursSinceLastVisit > 24) {
-        const result = unlockAchievementHelper(currentState, 'return_visitor');
+    const timer = window.setTimeout(() => {
+      const currentState = loadGamificationState();
+      const now = new Date();
+      const newVisitCount = currentState.visitCount + 1;
+      currentState.visitCount = newVisitCount;
+
+      if (newVisitCount === 1) {
+        const result = unlockAchievementHelper(currentState, 'first_visit');
         if (result.achievement) {
+          setState(result.newState);
           setPendingToast({ type: 'achievement', data: result.achievement });
-          currentState.xp = result.newState.xp;
-          currentState.level = result.newState.level;
-          currentState.achievements = result.newState.achievements;
+          saveGamificationState(result.newState);
+          return;
         }
       }
-    }
-    
-    // Check for night owl
-    const hour = now.getHours();
-    if (hour >= 0 && hour < 4) {
-      const result = unlockAchievementHelper(currentState, 'night_owl');
-      if (result.achievement) {
-        setPendingToast({ type: 'achievement', data: result.achievement });
-        currentState.xp = result.newState.xp;
-        currentState.level = result.newState.level;
-        currentState.achievements = result.newState.achievements;
+
+      if (currentState.lastVisit && newVisitCount > 1) {
+        const lastVisit = new Date(currentState.lastVisit);
+        const hoursSinceLastVisit = (now.getTime() - lastVisit.getTime()) / (1000 * 60 * 60);
+        if (hoursSinceLastVisit > 24) {
+          const result = unlockAchievementHelper(currentState, 'return_visitor');
+          if (result.achievement) {
+            setPendingToast({ type: 'achievement', data: result.achievement });
+            Object.assign(currentState, result.newState);
+          }
+        }
       }
-    }
-    
-    currentState.lastVisit = now;
-    saveGamificationState(currentState);
-    setState(currentState);
+
+      if (now.getHours() >= 0 && now.getHours() < 4) {
+        const result = unlockAchievementHelper(currentState, 'night_owl');
+        if (result.achievement) {
+          setPendingToast({ type: 'achievement', data: result.achievement });
+          Object.assign(currentState, result.newState);
+        }
+      }
+
+      currentState.lastVisit = now;
+      saveGamificationState(currentState);
+      setState(currentState);
+    }, 0);
+
+    return () => window.clearTimeout(timer);
   }, []);
 
   const addXP = useCallback((amount: number) => {

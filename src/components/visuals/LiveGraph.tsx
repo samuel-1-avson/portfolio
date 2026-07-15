@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 const LiveGraph = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const mousePosRef = useRef({ x: 0, y: 0 });
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [hoverValue, setHoverValue] = useState<number | null>(null);
 
@@ -47,8 +48,14 @@ const LiveGraph = () => {
       ctx.strokeStyle = '#22c55e10';
       ctx.lineWidth = 1;
       ctx.beginPath();
-      for (let i = 0; i < width; i += 40) ctx.moveTo(i, 0), ctx.lineTo(i, height);
-      for (let i = 0; i < height; i += 40) ctx.moveTo(0, i), ctx.lineTo(width, i);
+      for (let i = 0; i < width; i += 40) {
+        ctx.moveTo(i, 0);
+        ctx.lineTo(i, height);
+      }
+      for (let i = 0; i < height; i += 40) {
+        ctx.moveTo(0, i);
+        ctx.lineTo(width, i);
+      }
       ctx.stroke();
 
       // Main Graph Line
@@ -76,7 +83,7 @@ const LiveGraph = () => {
       // Interaction
       if (isHovering) {
           // Find closest point to mouse X
-          const mouseIndex = Math.min(Math.max(Math.round(mousePos.x / stepX), 0), dataPoints - 1);
+          const mouseIndex = Math.min(Math.max(Math.round(mousePosRef.current.x / stepX), 0), dataPoints - 1);
           const pointX = mouseIndex * stepX;
           const pointY = height - data[mouseIndex];
 
@@ -101,9 +108,7 @@ const LiveGraph = () => {
           // Update state for tooltip (debounced/throttled via React state roughly)
           // In a high-freq loop, setting state can be costly, but for simple visualization it's okay
           // We'll read this value from an overlaid div instead of drawing text on canvas for clearer font
-          if (Math.abs(pointX - mousePos.x) < 50) {
-             // Just update a local var normally, but here we want to trigger UI update potentially
-          }
+          void pointX;
       } else {
         // Draw active latest point if not hovering
         const lastX = width;
@@ -117,18 +122,20 @@ const LiveGraph = () => {
         ctx.shadowBlur = 0;
       }
       
-      requestAnimationFrame(draw);
+      animationId = requestAnimationFrame(draw);
     };
 
-    const animationId = requestAnimationFrame(draw);
+    let animationId = requestAnimationFrame(draw);
     
     // Mouse Handlers attached to canvas
     const onMouseMove = (e: MouseEvent) => {
         const rect = canvas.getBoundingClientRect();
-        setMousePos({
+        const nextMousePos = {
             x: e.clientX - rect.left,
             y: e.clientY - rect.top
-        });
+        };
+        mousePosRef.current = nextMousePos;
+        setMousePos(nextMousePos);
         isHovering = true;
         
         // Calculate hover value
@@ -153,9 +160,7 @@ const LiveGraph = () => {
         canvas.removeEventListener('mouseleave', onMouseLeave);
         cancelAnimationFrame(animationId);
     };
-  }, [mousePos]); // Re-bind if mousePos changes? Actually dependency should be empty or handle refs carefully.
-                  // For perf, better to use ref for mouse position inside effect, but Effect runs once.
-                  // We used a local var `isHovering` closed over. `mousePos` state is for tooltip.
+  }, []);
 
   return (
     <div className="w-full h-full relative overflow-hidden bg-black/40 backdrop-blur-sm border border-green-500/20 rounded-lg group">

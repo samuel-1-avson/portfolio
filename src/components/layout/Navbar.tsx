@@ -1,60 +1,77 @@
 "use client";
 
-import Link from 'next/link';
-import { portfolioData } from '@/data/portfolio';
-import ThemeToggle from './ThemeToggle';
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import ThemeToggle from "./ThemeToggle";
 
-const Navbar = () => {
-  const handleScroll = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, id: string) => {
-    e.preventDefault();
-    const targetId = id.replace('#', '');
-    const element = document.getElementById(targetId);
-    if (element) {
-      const offset = 80;
-      const bodyRect = document.body.getBoundingClientRect().top;
-      const elementRect = element.getBoundingClientRect().top;
-      const elementPosition = elementRect - bodyRect;
-      const offsetPosition = elementPosition - offset;
+const navLinks = [
+  { name: "About", path: "#about" },
+  { name: "Experience", path: "#experience" },
+  { name: "Projects", path: "#projects" },
+  { name: "Connect", path: "#connect" },
+];
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
+export default function Navbar() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("hero");
+
+  useEffect(() => {
+    const sections = ["hero", ...navLinks.map(({ path }) => path.slice(1))]
+      .map((id) => document.getElementById(id))
+      .filter((section): section is HTMLElement => Boolean(section));
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((entry) => entry.isIntersecting && setActiveSection(entry.target.id)),
+      { rootMargin: "-25% 0px -65% 0px" },
+    );
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
+
+  const navigate = (event: React.MouseEvent<HTMLAnchorElement>, path: string) => {
+    event.preventDefault();
+    const target = document.querySelector(path);
+    if (target instanceof HTMLElement) {
+      history.pushState(null, "", path);
+      target.focus({ preventScroll: true });
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
     }
+    setMenuOpen(false);
   };
 
-  const navLinks = [
-    { name: 'About', path: '#about' },
-    { name: 'Experience', path: '#experience' },
-    { name: 'Projects', path: '#projects' },
-    { name: 'Connect', path: '#connect' },
-  ];
-
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-[var(--retro-bg)]/90 backdrop-blur-sm border-b border-[var(--retro-border)]">
-      <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-        {/* Logo */}
-        <Link href="/" className="font-mono font-bold text-[var(--retro-fg)] hover:text-green-600 transition-colors">
-          {portfolioData.personal.name.toLowerCase()}_
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-[var(--retro-border)] bg-[color:color-mix(in_srgb,var(--retro-bg)_92%,transparent)] backdrop-blur-md">
+      <div className="container mx-auto flex min-h-16 max-w-6xl items-center justify-between px-5 sm:px-6">
+        <Link href="#hero" onClick={(event) => navigate(event, "#hero")} className="font-mono text-sm font-bold tracking-tight text-[var(--retro-fg)] focus-visible:outline-none">
+          samuel<span className="text-[var(--terminal-green)]">_</span>
         </Link>
-        
-        {/* Navigation */}
-        <nav className="flex items-center gap-6">
+
+        <nav aria-label="Primary navigation" className="hidden items-center gap-1 md:flex">
           {navLinks.map((link) => (
-            <a 
-              key={link.path} 
-              href={link.path}
-              onClick={(e) => handleScroll(e, link.path)}
-              className="font-mono text-sm text-[var(--retro-fg)]/60 hover:text-green-600 transition-colors hidden sm:block"
-            >
+            <a key={link.path} href={link.path} onClick={(event) => navigate(event, link.path)} aria-current={activeSection === link.path.slice(1) ? "page" : undefined} className="rounded-md px-3 py-2 font-mono text-xs text-[var(--text-muted)] transition hover:bg-[var(--retro-hover)] hover:text-[var(--retro-fg)]">
               {link.name}
             </a>
           ))}
           <ThemeToggle />
         </nav>
+
+        <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle />
+          <button type="button" aria-expanded={menuOpen} aria-controls="mobile-navigation" aria-label="Toggle navigation" onClick={() => setMenuOpen((open) => !open)} className="grid size-10 place-items-center rounded-md border border-[var(--retro-border)] font-mono text-lg">
+            {menuOpen ? "×" : "☰"}
+          </button>
+        </div>
       </div>
+      {menuOpen && (
+        <nav id="mobile-navigation" aria-label="Mobile navigation" className="border-t border-[var(--retro-border)] bg-[var(--retro-bg)] p-3 md:hidden">
+          <div className="container mx-auto grid max-w-6xl gap-1 px-2">
+            {navLinks.map((link) => (
+              <a key={link.path} href={link.path} onClick={(event) => navigate(event, link.path)} className="rounded-md px-4 py-3 font-mono text-sm text-[var(--retro-fg)] hover:bg-[var(--retro-hover)]">
+                {link.name}
+              </a>
+            ))}
+          </div>
+        </nav>
+      )}
     </header>
   );
-};
-
-export default Navbar;
+}

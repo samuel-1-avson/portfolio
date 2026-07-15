@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Samuel Avornyoh — Portfolio
 
-## Getting Started
+A personal portfolio for Samuel Maxwell Obeng Avornyoh, built with Next.js, React, TypeScript, and Tailwind CSS.
 
-First, run the development server:
+## Requirements
+
+- Node.js 20.9 or later
+- npm 10 or later
+
+## Local development
 
 ```bash
+npm install
+copy .env.example .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The chatbot works with a structured portfolio-data fallback by default. To enable Gemini synthesis, add a Gemini API key to `.env.local`:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```dotenv
+GEMINI_API_KEY=your_key_here
+GEMINI_MODEL=gemini-2.5-flash
+```
 
-## Learn More
+`GEMINI_MODEL`, `CHAT_RATE_LIMIT_PER_MINUTE`, and `CHAT_DAILY_LIMIT` are optional operational controls documented in [`.env.example`](.env.example). Do not expose `GEMINI_API_KEY` to the browser or commit it to source control.
 
-To learn more about Next.js, take a look at the following resources:
+## Quality checks
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run lint
+npm run typecheck
+npm run test
+npm run build
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The test suite verifies the chatbot input contract and its portfolio-data fallback. GitHub Actions runs all four checks for every push and pull request.
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Deploy to Vercel or another Node.js-compatible Next.js host. Add the same environment variables in the host's project settings. The `/api/chat` route uses an in-memory, per-instance request limit as a baseline safeguard; use a shared rate-limit store before a high-traffic launch.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Project structure
+
+- `src/app` — application routes, global styles, and the chat API
+- `src/components` — portfolio sections, dialogs, layout, and visual effects
+- `src/data/portfolio.ts` — current portfolio facts used by the UI and fallback assistant
+- `src/lib/portfolio-chat.ts` — chatbot validation, context, and fallback responses

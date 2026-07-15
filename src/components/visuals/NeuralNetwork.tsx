@@ -1,19 +1,13 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+
+const nodes = Array.from({ length: 15 }, (_, index) => ({
+  x: (index * 37 + 11) % 100,
+  y: (index * 53 + 17) % 100,
+}));
 
 const NeuralNetwork = () => {
-  const [nodes, setNodes] = useState<{x: number, y: number}[]>([]);
-
-  useEffect(() => {
-    // Generate random nodes
-    const newNodes = Array.from({ length: 15 }).map(() => ({
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-    }));
-    setNodes(newNodes);
-  }, []);
-
   return (
     <div className="absolute inset-0 z-[-1] overflow-hidden opacity-10 pointer-events-none">
       <svg className="w-full h-full">

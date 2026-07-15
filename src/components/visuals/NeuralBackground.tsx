@@ -129,7 +129,7 @@ const NeuralBackground: React.FC = () => {
       });
 
       // Update and draw nodes
-      nodes.forEach((node, i) => {
+      nodes.forEach((node) => {
         // Gentle floating motion
         node.x += node.vx;
         node.y += node.vy;

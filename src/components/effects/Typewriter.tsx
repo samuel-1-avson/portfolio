@@ -10,10 +10,11 @@ interface TypewriterProps {
 }
 
 const Typewriter: React.FC<TypewriterProps> = ({ text, speed = 50, className = '', delay = 0 }) => {
-  const [displayedText, setDisplayedText] = useState('');
+  const [displayedText, setDisplayedText] = useState(text);
   const [started, setStarted] = useState(false);
 
   useEffect(() => {
+    setDisplayedText('');
     const timer = setTimeout(() => {
       setStarted(true);
     }, delay);
@@ -37,9 +38,9 @@ const Typewriter: React.FC<TypewriterProps> = ({ text, speed = 50, className = '
   }, [text, speed, started]);
 
   return (
-    <span className={className}>
+    <span className={className} aria-label={text}>
       {displayedText}
-      <span className="animate-cursor-blink border-r-2 border-current ml-1"></span>
+      <span aria-hidden="true" className="animate-cursor-blink border-r-2 border-current ml-1"></span>
     </span>
   );
 };

@@ -9,10 +9,8 @@ const ProjectsSection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openProject = (project: typeof portfolioData.projects[0]) => {
-    if (project.link !== '#') {
-      setSelectedProject(project);
-      setIsModalOpen(true);
-    }
+    setSelectedProject(project);
+    setIsModalOpen(true);
   };
 
   // First two projects are featured
@@ -78,15 +76,8 @@ const ProjectsSection = () => {
                     ))}
                   </div>
                   
-                  {/* Link */}
-                  {project.link !== '#' && (
-                    <button 
-                      onClick={() => openProject(project)}
-                      className="px-4 py-2 bg-green-500 text-white text-sm hover:bg-green-600 transition-colors w-full md:w-auto text-center"
-                    >
-                      View Project →
-                    </button>
-                  )}
+                  <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">{project.status.replace('-', ' ')}</p>
+                  <button onClick={() => openProject(project)} className="px-4 py-2 bg-green-500 text-white text-sm hover:bg-green-600 transition-colors w-full md:w-auto text-center">View case study →</button>
                 </div>
               </div>
             ))}
@@ -129,15 +120,8 @@ const ProjectsSection = () => {
                     ))}
                   </div>
                   
-                  {/* Link */}
-                  {project.link !== '#' && (
-                    <button 
-                      onClick={() => openProject(project)}
-                      className="text-sm text-green-600 hover:text-green-500"
-                    >
-                      View Source →
-                    </button>
-                  )}
+                  <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">{project.status.replace('-', ' ')}</p>
+                  <button onClick={() => openProject(project)} className="text-sm text-green-600 hover:text-green-500">View case study →</button>
                 </div>
               </div>
             ))}

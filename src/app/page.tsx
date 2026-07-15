@@ -1,6 +1,4 @@
 "use client";
-
-import { useState, useEffect } from "react";
 import Navbar from "@/components/layout/Navbar";
 import HeroSection from "@/components/sections/HeroSection";
 import AboutSection from "@/components/sections/AboutSection";
@@ -12,14 +10,9 @@ import RevealOnScroll from "@/components/effects/RevealOnScroll";
 import MLBackground from "@/components/visuals/MLBackground";
 
 export default function Home() {
-  const [isReady, setIsReady] = useState(false);
-
-  useEffect(() => {
-    setTimeout(() => setIsReady(true), 100);
-  }, []);
-
   return (
     <main className="min-h-screen bg-[var(--retro-bg)] text-[var(--retro-fg)] relative overflow-x-hidden">
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-md focus:bg-[var(--retro-fg)] focus:px-4 focus:py-3 focus:text-[var(--retro-bg)]">Skip to content</a>
       {/* Subtle grid background */}
       <div 
         className="fixed inset-0 pointer-events-none opacity-[0.02] z-0"
@@ -36,10 +29,7 @@ export default function Home() {
       <Navbar />
 
       {/* Main Content */}
-      <div className={`
-        relative z-10 transition-opacity duration-500
-        ${isReady ? 'opacity-100' : 'opacity-0'}
-      `}>
+      <div id="main-content" className="relative z-10" tabIndex={-1}>
         <HeroSection />
         
         <RevealOnScroll>

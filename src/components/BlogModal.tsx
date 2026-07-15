@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 interface BlogModalProps {
   isOpen: boolean;
@@ -17,31 +17,7 @@ interface BlogModalProps {
 }
 
 const BlogModal = ({ isOpen, onClose, post }: BlogModalProps) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [progress, setProgress] = useState(0);
   const [showSummary, setShowSummary] = useState(false);
-
-  useEffect(() => {
-    if (isOpen) {
-      setIsLoading(true);
-      setProgress(0);
-      setShowSummary(false);
-      
-      // Fast loading animation
-      const interval = setInterval(() => {
-        setProgress(prev => {
-          if (prev >= 100) {
-            clearInterval(interval);
-            setTimeout(() => setIsLoading(false), 200);
-            return 100;
-          }
-          return prev + 25;
-        });
-      }, 60);
-
-      return () => clearInterval(interval);
-    }
-  }, [isOpen]);
 
   if (!isOpen || !post) return null;
 
@@ -67,28 +43,7 @@ const BlogModal = ({ isOpen, onClose, post }: BlogModalProps) => {
 
         {/* Content */}
         <div className="p-6">
-          {isLoading ? (
-            <div className="py-8 text-center">
-              <p className="text-sm text-[var(--retro-fg)] mb-2">
-                [ FETCHING ARTICLE... ]
-              </p>
-              <p className="text-xs text-green-600 mb-4">
-                loading post data
-              </p>
-              
-              {/* Progress bar */}
-              <div className="w-64 h-2 border border-[var(--retro-border)] bg-transparent mx-auto mb-4">
-                <div 
-                  className="h-full bg-green-500 transition-all duration-100"
-                  style={{ width: `${Math.min(progress, 100)}%` }}
-                />
-              </div>
-              
-              <p className="text-xs text-[var(--retro-fg)]/50">
-                {Math.min(Math.round(progress), 100)}% COMPLETE
-              </p>
-            </div>
-          ) : showSummary ? (
+          {showSummary ? (
             <div className="animate-fadeIn">
                {/* Summary Header */}
                <div className="mb-4 pb-2 border-b border-[var(--retro-border)] flex justify-between items-center">

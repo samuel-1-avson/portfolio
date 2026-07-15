@@ -6,15 +6,17 @@ const ThemeToggle = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   useEffect(() => {
-    // Check local storage or preference
-    const storedTheme = localStorage.getItem('theme');
-    if (storedTheme === 'dark' || (!storedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      setTheme('dark');
-      document.documentElement.classList.add('dark');
-    } else {
-      setTheme('light');
-      document.documentElement.classList.remove('dark');
-    }
+    const timer = window.setTimeout(() => {
+      const storedTheme = localStorage.getItem('theme');
+      const nextTheme = storedTheme === 'dark' || (!storedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)
+        ? 'dark'
+        : 'light';
+
+      setTheme(nextTheme);
+      document.documentElement.classList.toggle('dark', nextTheme === 'dark');
+    }, 0);
+
+    return () => window.clearTimeout(timer);
   }, []);
 
   const toggleTheme = () => {
@@ -34,6 +36,7 @@ const ThemeToggle = () => {
       onClick={toggleTheme} 
       className="w-8 h-8 flex items-center justify-center border border-[var(--retro-border)] bg-transparent hover:border-green-500 transition-colors"
       aria-label="Toggle Theme"
+      aria-pressed={theme === 'dark'}
       title={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
     >
       {/* Simple contrast/theme icon */}

@@ -1,8 +1,12 @@
 export interface Project {
+  slug: string;
   title: string;
   description: string;
   link: string;
   tech: string[];
+  status: "open-source" | "prototype" | "concept";
+  role: string;
+  demo?: string;
   details?: string; // Markdown-like content for rich details
 }
 
@@ -152,9 +156,12 @@ export const portfolioData: PortfolioData = {
   ],
   projects: [
     {
+      slug: "neurobench",
       title: "FSM Designer / NeuroBench",
       description: "A graphical finite-state-machine editor and professional-grade embedded systems IDE built with Tauri (Rust + SolidJS). Features visual FSM design with cycle-accurate simulation, templates, C/Python code export, AI-assisted debugging, 90+ IPC commands, and real-time performance monitoring.",
       link: "https://github.com/samuel-1-avson/Neurostate",
+      status: "open-source",
+      role: "Product and systems developer",
       tech: ["Rust", "Tauri", "SolidJS", "TypeScript", "STM32", "probe-rs"],
       details: `
 # NeuroBench System Documentation v2.0
@@ -213,51 +220,76 @@ The background scheduler handles parallel execution of AI reasoning, compilation
 `
     },
     {
+      slug: "music-companion",
       title: "AI-powered Music Companion",
       description: "AI-powered music companion platform with React/TypeScript, Express.js, Supabase, Gemini, Spotify, YouTube/yt-dlp, Telegram Bot integration, and real-time WebSocket features.",
       link: "https://github.com/samuel-1-avson/music-companion",
+      demo: "https://music-companion-seven.vercel.app",
+      status: "open-source",
+      role: "Full-stack and AI developer",
       tech: ["React", "TypeScript", "Express.js", "Supabase", "Gemini AI", "WebSocket", "Telegram Bot"],
     },
     {
+      slug: "chain-registry",
       title: "Chain Registry Ecosystem",
       description: "Explored a Chain Registry Ecosystem project focused on registry integrity, blockchain metadata management, reproducible verification, governance, auditability, and supply-chain security.",
       link: "#",
+      status: "concept",
+      role: "Systems and security researcher",
       tech: ["Solidity", "Rust", "Blockchain", "Metadata", "Security"],
     },
     {
+      slug: "merchant-assistant",
       title: "AI Merchant Assistant",
       description: "Built AI Merchant Assistant, a Rust/Next.js/Supabase platform for voice-based sales recording, receipt OCR, inventory tracking, real-time analytics, forecasting, and smart merchant alerts.",
       link: "#",
+      status: "prototype",
+      role: "Product and platform developer",
       tech: ["Rust", "Next.js", "Supabase", "OCR", "Analytics", "AI"],
     },
     {
+      slug: "healthcare-no-show-prediction",
       title: "Healthcare No-Show Prediction",
       description: "Built a healthcare no-show prediction system using FastAPI, React, MLflow, Redis, RabbitMQ, PostgreSQL, and Prometheus/Grafana monitoring.",
       link: "https://github.com/samuel-1-avson/healthcare-appointments",
+      status: "open-source",
+      role: "ML and platform developer",
       tech: ["FastAPI", "React", "MLflow", "Redis", "RabbitMQ", "PostgreSQL", "Prometheus", "Grafana"],
     },
     {
+      slug: "proxy-marketplace",
       title: "Proxy Marketplace",
       description: "Designed proxy marketplace and recommendation-feed algorithm prototypes involving networking, marketplace architecture, usage-based billing, retrieval, ranking, scoring, and personalization.",
       link: "#",
+      status: "prototype",
+      role: "Architecture and ranking systems designer",
       tech: ["Go", "Python", "Networking", "Architecture", "Recommendation Alg"],
     },
     {
+      slug: "crypto-pos",
       title: "Crypto POS Payment System",
       description: "Designed a Crypto POS payment system concept for merchants to accept crypto payments, support stablecoins and major assets, verify transactions, generate receipts, and manage fiat or crypto settlement workflows.",
       link: "#",
+      status: "concept",
+      role: "Payments systems designer",
       tech: ["Solidity", "React", "Web3", "Smart Contracts", "Payments"],
     },
     {
+      slug: "sports-odds-arbitrage",
       title: "Sports Odds Arbitrage",
       description: "Developed sports odds arbitrage analytics tools with Python scraping, Redis caching, fuzzy/NLP event matching, alerting, rate limiting, and reliability-focused fallback handling.",
       link: "#",
+      status: "prototype",
+      role: "Data and reliability developer",
       tech: ["Python", "Redis", "Scraping", "NLP", "Fuzzy Matching", "Rate Limiting"],
     },
     {
+      slug: "sign-language-detection",
       title: "Sign Language Detection",
       description: "Designed a hybrid CNN-LSTM sign-language detection pipeline using video/image data and pose-based features.",
       link: "https://github.com/samuel-1-avson/Sign-Language-Detection-Hybrid-CNN-LSTM",
+      status: "open-source",
+      role: "Machine learning developer",
       tech: ["Python", "TensorFlow", "CNN", "LSTM", "OpenCV"],
     }
   ],

@@ -48,7 +48,7 @@ const ConnectSection = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 border border-white/30 flex items-center justify-center hover:border-green-500 hover:text-green-500 transition-colors"
-              title="GitHub"
+              aria-label="Visit Samuel's GitHub profile"
             >
               <GitHubIcon />
             </a>
@@ -57,14 +57,14 @@ const ConnectSection = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 border border-white/30 flex items-center justify-center hover:border-green-500 hover:text-green-500 transition-colors"
-              title="LinkedIn"
+              aria-label="Visit Samuel's LinkedIn profile"
             >
               <LinkedInIcon />
             </a>
             <a 
               href={`mailto:${portfolioData.personal.email}`}
               className="w-10 h-10 border border-white/30 flex items-center justify-center hover:border-green-500 hover:text-green-500 transition-colors"
-              title="Email"
+              aria-label="Email Samuel"
             >
               <EmailIcon />
             </a>

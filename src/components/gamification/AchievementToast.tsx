@@ -1,32 +1,19 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useGamification } from './GamificationProvider';
 import { Achievement, LEVEL_NAMES } from '@/lib/gamification';
 
 const AchievementToast: React.FC = () => {
   const { pendingToast, clearToast } = useGamification();
-  const [isVisible, setIsVisible] = useState(false);
-  const [isLeaving, setIsLeaving] = useState(false);
-
   useEffect(() => {
-    if (pendingToast) {
-      setIsVisible(true);
-      setIsLeaving(false);
+    if (!pendingToast) return;
 
-      const timer = setTimeout(() => {
-        setIsLeaving(true);
-        setTimeout(() => {
-          setIsVisible(false);
-          clearToast();
-        }, 300);
-      }, 4000);
-
-      return () => clearTimeout(timer);
-    }
+    const timer = window.setTimeout(clearToast, 4000);
+    return () => window.clearTimeout(timer);
   }, [pendingToast, clearToast]);
 
-  if (!isVisible || !pendingToast) return null;
+  if (!pendingToast) return null;
 
   const isAchievement = pendingToast.type === 'achievement';
   const achievement = isAchievement ? (pendingToast.data as Achievement) : null;
@@ -39,7 +26,7 @@ const AchievementToast: React.FC = () => {
           bg-[var(--retro-card-bg)] border border-[var(--terminal-green)]/50
           rounded-lg p-4 font-mono shadow-2xl
           transform transition-all duration-300
-          ${isLeaving ? 'translate-x-full opacity-0' : 'translate-x-0 opacity-100'}
+          translate-x-0 opacity-100
         `}
         style={{
           boxShadow: '0 0 30px var(--terminal-glow), 0 10px 40px rgba(0,0,0,0.3)',

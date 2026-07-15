@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { portfolioData } from '@/data/portfolio';
-import { useGamification } from './gamification/GamificationProvider';
+import { useOptionalGamification } from './gamification/GamificationProvider';
 
 interface Message {
   id: string;
@@ -83,13 +83,7 @@ const Chatbot: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   
-  // Try to get gamification context, but handle case where it's not available
-  let gamificationContext: ReturnType<typeof useGamification> | null = null;
-  try {
-    gamificationContext = useGamification();
-  } catch {
-    // Not wrapped in GamificationProvider, that's okay
-  }
+  const gamificationContext = useOptionalGamification();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });

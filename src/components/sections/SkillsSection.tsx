@@ -1,7 +1,5 @@
 "use client";
 
-import { portfolioData } from "@/data/portfolio";
-
 const skillCategories = [
   {
     title: 'CORE COMPETENCIES',

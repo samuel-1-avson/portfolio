@@ -1,26 +1,20 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const TrainingLog = () => {
   const [logs, setLogs] = useState<string[]>([]);
-  const [epoch, setEpoch] = useState(1);
+  const epochRef = useRef(1);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setEpoch(prev => {
-        const nextEpoch = prev + 1;
-        const loss = (1 / Math.log(nextEpoch + 2) + Math.random() * 0.05).toFixed(4);
-        const acc = (1 - (0.5 / Math.log(nextEpoch + 2))).toFixed(4);
-        
-        setLogs(prevLogs => {
-          const newLog = `Epoch ${nextEpoch}/1000: loss=${loss} - acc=${acc} - val_loss=${(parseFloat(loss) + 0.02).toFixed(4)}`;
-          const updatedLogs = [...prevLogs, newLog];
-          if (updatedLogs.length > 8) updatedLogs.shift();
-          return updatedLogs;
-        });
-        
-        return nextEpoch;
+      epochRef.current += 1;
+      const loss = (1 / Math.log(epochRef.current + 2) + Math.random() * 0.05).toFixed(4);
+      const acc = (1 - (0.5 / Math.log(epochRef.current + 2))).toFixed(4);
+
+      setLogs((prevLogs) => {
+        const newLog = `Epoch ${epochRef.current}/1000: loss=${loss} - acc=${acc} - val_loss=${(parseFloat(loss) + 0.02).toFixed(4)}`;
+        return [...prevLogs, newLog].slice(-8);
       });
     }, 800);
 

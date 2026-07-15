@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface ResumeModalProps {
   isOpen: boolean;
@@ -8,47 +8,35 @@ interface ResumeModalProps {
 }
 
 const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [progress, setProgress] = useState(0);
   const [hasError, setHasError] = useState(false);
+  const closeButton = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    if (isOpen) {
-      setIsLoading(true);
-      setProgress(0);
-      setHasError(false);
-      
-      // Faster loading animation
-      const interval = setInterval(() => {
-        setProgress(prev => {
-          if (prev >= 100) {
-            clearInterval(interval);
-            setTimeout(() => setIsLoading(false), 200);
-            return 100;
-          }
-          return prev + 20;
-        });
-      }, 80);
-
-      return () => clearInterval(interval);
-    }
-  }, [isOpen]);
+    if (!isOpen) return;
+    const previous = document.activeElement as HTMLElement | null;
+    const onKeyDown = (event: KeyboardEvent) => event.key === "Escape" && onClose();
+    document.addEventListener("keydown", onKeyDown);
+    document.body.style.overflow = "hidden";
+    window.setTimeout(() => closeButton.current?.focus(), 0);
+    return () => { document.removeEventListener("keydown", onKeyDown); document.body.style.overflow = ""; previous?.focus(); };
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
   return (
-    <div 
+    <div role="presentation"
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
-      onClick={onClose}
+      onMouseDown={onClose}
     >
-      <div 
+      <section role="dialog" aria-modal="true" aria-labelledby="resume-dialog-title"
         className="bg-[var(--retro-bg)] border border-[var(--retro-border)] w-full max-w-4xl h-[85vh] mx-4 flex flex-col font-mono animate-fadeIn"
-        onClick={(e) => e.stopPropagation()}
+        onMouseDown={(e) => e.stopPropagation()}
       >
         {/* Terminal Header */}
         <div className="bg-[var(--retro-fg)] text-[var(--retro-bg)] px-4 py-2 flex items-center justify-between shrink-0">
-          <span className="text-xs uppercase">RESUME_PREVIEW.PDF</span>
+          <span id="resume-dialog-title" className="text-xs uppercase">RESUME_PREVIEW.PDF</span>
           <button 
+            ref={closeButton}
             onClick={onClose}
             className="text-xs hover:opacity-70 transition-opacity"
           >
@@ -58,28 +46,7 @@ const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
 
         {/* Content */}
         <div className="flex-1 flex items-center justify-center overflow-hidden">
-          {isLoading ? (
-            <div className="text-center p-8">
-              <p className="text-sm text-[var(--retro-fg)] mb-2">
-                [ LOADING RESUME DATA... ]
-              </p>
-              <p className="text-xs text-green-600 mb-4">
-                processing_file.pdf
-              </p>
-              
-              {/* Progress bar */}
-              <div className="w-64 h-2 border border-[var(--retro-border)] bg-transparent mx-auto mb-4">
-                <div 
-                  className="h-full bg-green-500 transition-all duration-100"
-                  style={{ width: `${Math.min(progress, 100)}%` }}
-                />
-              </div>
-              
-              <p className="text-xs text-[var(--retro-fg)]/50">
-                {Math.min(Math.round(progress), 100)}% COMPLETE
-              </p>
-            </div>
-          ) : hasError ? (
+          {hasError ? (
             <div className="text-center p-8">
               <p className="text-sm text-red-500 mb-4">
                 [ ERROR: resume.pdf not found ]
@@ -127,7 +94,7 @@ const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
             </a>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 };
