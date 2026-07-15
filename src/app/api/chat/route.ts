@@ -113,7 +113,9 @@ export async function POST(request: NextRequest) {
   }
 
   const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) {
+  const backend = process.env.GEMINI_BACKEND || "developer";
+  const usesVertexAdc = backend === "vertex-adc";
+  if (!apiKey && !usesVertexAdc) {
     return NextResponse.json({
       response: getPortfolioFallback(validation.message),
       source: "portfolio",
@@ -126,7 +128,18 @@ export async function POST(request: NextRequest) {
 
   try {
     const httpOptions = { timeout: 10_000, retryOptions: { attempts: 1 } };
-    const ai = process.env.GEMINI_BACKEND === "vertex"
+    const serviceAccount = process.env.GOOGLE_SERVICE_ACCOUNT_JSON
+      ? JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON) as { client_email: string; private_key: string }
+      : undefined;
+    const ai = usesVertexAdc
+      ? new GoogleGenAI({
+        vertexai: true,
+        project: process.env.GOOGLE_CLOUD_PROJECT,
+        location: process.env.GOOGLE_CLOUD_LOCATION || "global",
+        googleAuthOptions: serviceAccount ? { credentials: serviceAccount } : undefined,
+        httpOptions,
+      })
+      : backend === "vertex"
       ? new GoogleGenAI({
         vertexai: true,
         apiKey,
