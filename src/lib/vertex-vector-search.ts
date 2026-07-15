@@ -94,12 +94,18 @@ export async function retrieveSemanticPortfolioEvidence(query: string, limit = m
       }),
       signal: AbortSignal.timeout(6_000),
     });
-    if (!response.ok) return null;
+    if (!response.ok) {
+      console.warn("Portfolio semantic retrieval is unavailable", { status: response.status });
+      return null;
+    }
 
     const payload = await response.json() as VectorSearchResponse;
     const evidence = (payload.results ?? []).map(toEvidence).filter((item): item is RetrievedEvidence => item !== null);
     return evidence.length > 0 ? evidence : null;
-  } catch {
+  } catch (error) {
+    console.warn("Portfolio semantic retrieval request failed", {
+      name: error instanceof Error ? error.name : "UnknownError",
+    });
     return null;
   }
 }

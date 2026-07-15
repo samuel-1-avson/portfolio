@@ -60,33 +60,31 @@ for (const [index, evidence] of portfolioKnowledgeBase.entries()) {
     kind: evidence.kind,
     ...(evidence.href ? { href: evidence.href } : {}),
   };
-  const createResponse = await request(`${endpoint}?dataObjectId=${dataObjectId}`, "POST", { data });
+  const existingResponse = await request(`${endpoint}/${dataObjectId}`, "GET");
+  if (existingResponse.ok) {
+    const existing = await existingResponse.json() as { data?: Record<string, unknown> };
+    if (JSON.stringify(existing.data) === JSON.stringify(data)) {
+      skipped += 1;
+      continue;
+    }
 
-  if (createResponse.ok) {
-    created += 1;
+    const updateResponse = await request(`${endpoint}/${dataObjectId}?updateMask=data`, "PATCH", { data });
+    if (!updateResponse.ok) {
+      throw new Error(`Unable to update ${dataObjectId}: ${updateResponse.status} ${await updateResponse.text()}`);
+    }
+    updated += 1;
     continue;
   }
 
-  if (createResponse.status !== 409) {
-    throw new Error(`Unable to create ${dataObjectId}: ${createResponse.status} ${await createResponse.text()}`);
-  }
-
-  const existingResponse = await request(`${endpoint}/${dataObjectId}`, "GET");
-  if (!existingResponse.ok) {
+  if (existingResponse.status !== 404) {
     throw new Error(`Unable to inspect ${dataObjectId}: ${existingResponse.status} ${await existingResponse.text()}`);
   }
 
-  const existing = await existingResponse.json() as { data?: Record<string, unknown> };
-  if (JSON.stringify(existing.data) === JSON.stringify(data)) {
-    skipped += 1;
-    continue;
+  const createResponse = await request(`${endpoint}?dataObjectId=${dataObjectId}`, "POST", { data });
+  if (!createResponse.ok) {
+    throw new Error(`Unable to create ${dataObjectId}: ${createResponse.status} ${await createResponse.text()}`);
   }
-
-  const updateResponse = await request(`${endpoint}/${dataObjectId}?updateMask=data`, "PATCH", { data });
-  if (!updateResponse.ok) {
-    throw new Error(`Unable to update ${dataObjectId}: ${updateResponse.status} ${await updateResponse.text()}`);
-  }
-  updated += 1;
+  created += 1;
 }
 
 console.log(`Vector Search sync complete: ${created} created, ${updated} updated, ${skipped} unchanged, ${portfolioKnowledgeBase.length} total.`);

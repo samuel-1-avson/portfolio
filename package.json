@@ -9,7 +9,8 @@
     "lint": "eslint src eslint.config.mjs next.config.ts",
     "typecheck": "tsc --noEmit",
     "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test src/lib/portfolio-chat.test.ts",
-    "rag:sync": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/sync-vector-search.ts"
+    "rag:sync": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/sync-vector-search.ts",
+    "rag:verify": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/verify-vector-search.ts"
   },
   "dependencies": {
     "@google/genai": "^2.11.0",
