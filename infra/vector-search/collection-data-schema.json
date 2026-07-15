@@ -1,0 +1,11 @@
+{
+  "type": "object",
+  "properties": {
+    "content": { "type": "string" },
+    "source_id": { "type": "string" },
+    "source_title": { "type": "string" },
+    "kind": { "type": "string" },
+    "href": { "type": "string" }
+  },
+  "required": ["content", "source_id", "source_title", "kind"]
+}

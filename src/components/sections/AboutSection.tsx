@@ -1,6 +1,7 @@
 "use client";
 
 import { portfolioData } from "@/data/portfolio";
+import { ExternalLinkIcon } from "@/components/icons/ExternalLinkIcon";
 
 const expertiseCards = [
   {
@@ -130,7 +131,36 @@ const AboutSection = () => {
           </div>
           <div>
             <p className="font-mono text-xs font-bold tracking-wider text-green-600">RECOGNITION & LEADERSHIP</p>
-            <ul className="mt-4 space-y-3">{portfolioData.awards.map((award) => <li key={award} className="rounded-lg border border-[var(--retro-border)] bg-[var(--retro-card-bg)] p-4 text-sm leading-6 text-[var(--text-muted)]"><span className="mr-2 text-green-600">✦</span>{award}</li>)}</ul>
+            <ul className="mt-4 space-y-3">
+              {portfolioData.awards.map((award) => {
+                const links = portfolioData.awardLinks.filter((item) => item.award === award);
+
+                return (
+                  <li key={award} className="rounded-lg border border-[var(--retro-border)] bg-[var(--retro-card-bg)] p-4 text-sm leading-6 text-[var(--text-muted)]">
+                    <div>
+                      <span className="mr-2 text-green-600">✦</span>
+                      <span>{award}</span>
+                    </div>
+                    {links.length > 0 && (
+                      <span className="mt-3 flex flex-wrap gap-x-4 gap-y-1 pl-5">
+                        {links.map((link) => (
+                          <a
+                            key={link.href}
+                            href={link.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs font-medium text-green-600 underline-offset-2 hover:underline"
+                          >
+                            <span>{link.label}</span>
+                            <ExternalLinkIcon className="h-3.5 w-3.5" />
+                          </a>
+                        ))}
+                      </span>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
           </div>
         </div>
       </div>

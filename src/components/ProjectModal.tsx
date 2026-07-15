@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { portfolioData, type Project } from "@/data/portfolio";
+import { ExternalLinkIcon } from "@/components/icons/ExternalLinkIcon";
 
 interface ProjectModalProps { isOpen: boolean; onClose: () => void; project: Project | null; }
 
@@ -23,7 +24,11 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
       <div className="p-5 sm:p-8"><h2 id="project-dialog-title" className="text-3xl font-bold tracking-tight text-[var(--retro-fg)]">{project.title}</h2><p className="mt-3 text-sm font-medium text-[var(--terminal-green)]">Role: {project.role}</p><p className="mt-5 text-base leading-7 text-[var(--text-muted)]">{project.description}</p>
         {project.details && <div className="mt-8 border-t border-[var(--retro-border)] pt-6"><p className="font-mono text-xs font-bold text-[var(--text-subtle)]">SELECTED SYSTEM NOTES</p><div className="mt-3 space-y-2 text-sm leading-6 text-[var(--text-muted)]">{project.details.split("\n").filter(Boolean).slice(0, 12).map((line) => <p key={line}>{line.replace(/^#+\s?|^\*\*|\*\*$/g, "")}</p>)}</div></div>}
         <div className="mt-8 flex flex-wrap gap-2">{project.tech.map((tech) => <span key={tech} className="rounded-full border border-[var(--retro-border)] px-3 py-1 text-xs text-[var(--text-muted)]">{tech}</span>)}</div>
-        <div className="mt-8 flex flex-wrap gap-3 border-t border-[var(--retro-border)] pt-6">{sourceAvailable && <a href={project.link} target="_blank" rel="noopener noreferrer" className="rounded-md bg-[var(--retro-fg)] px-4 py-2 text-sm font-semibold text-[var(--retro-bg)]">Open source <span aria-hidden="true">↗</span></a>}{project.demo && <a href={project.demo} target="_blank" rel="noopener noreferrer" className="rounded-md border border-[var(--retro-border)] px-4 py-2 text-sm font-semibold text-[var(--retro-fg)]">View live demo <span aria-hidden="true">↗</span></a>}{!sourceAvailable && <a href={`mailto:${portfolioData.personal.email}?subject=${encodeURIComponent(`Case study request: ${project.title}`)}`} className="rounded-md border border-[var(--retro-border)] px-4 py-2 text-sm font-semibold text-[var(--retro-fg)]">Request case study</a>}</div>
+        <div className="mt-8 flex flex-wrap gap-3 border-t border-[var(--retro-border)] pt-6">
+          {sourceAvailable && <a href={project.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 rounded-md bg-[var(--retro-fg)] px-4 py-2 text-sm font-semibold text-[var(--retro-bg)] transition-colors hover:bg-[var(--terminal-green)]"><span>Open source</span><ExternalLinkIcon /></a>}
+          {project.demo && <a href={project.demo} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 rounded-md border border-[var(--retro-border)] px-4 py-2 text-sm font-semibold text-[var(--retro-fg)] transition-colors hover:border-[var(--terminal-green)] hover:text-[var(--terminal-green)]"><span>View live demo</span><ExternalLinkIcon /></a>}
+          {!sourceAvailable && <a href={`mailto:${portfolioData.personal.email}?subject=${encodeURIComponent(`Case study request: ${project.title}`)}`} className="inline-flex items-center rounded-md border border-[var(--retro-border)] px-4 py-2 text-sm font-semibold text-[var(--retro-fg)] transition-colors hover:border-[var(--terminal-green)] hover:text-[var(--terminal-green)]">Request case study</a>}
+        </div>
       </div>
     </section>
   </div>;

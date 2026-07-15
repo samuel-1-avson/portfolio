@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { portfolioData } from "@/data/portfolio";
 import ProjectModal from "@/components/ProjectModal";
+import { ExternalLinkIcon } from "@/components/icons/ExternalLinkIcon";
 
 const ProjectsSection = () => {
   const [selectedProject, setSelectedProject] = useState<typeof portfolioData.projects[0] | null>(null);
@@ -39,8 +40,8 @@ const ProjectsSection = () => {
             {featuredProjects.map((project, idx) => (
               <div key={idx} className="font-mono border-2 border-green-500 bg-[var(--retro-bg)] relative overflow-hidden h-full flex flex-col">
                 {/* Featured Badge */}
-                <div className="absolute top-0 right-0 bg-green-500 text-white text-xs px-3 py-1 font-bold">
-                  ★ FEATURED
+                <div className="absolute top-0 right-0 bg-green-500 px-3 py-1 font-mono text-[10px] font-bold tracking-wider text-white">
+                  FEATURED / 0{idx + 1}
                 </div>
                 
                 {/* Terminal Header */}
@@ -76,8 +77,16 @@ const ProjectsSection = () => {
                     ))}
                   </div>
                   
-                  <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">{project.status.replace('-', ' ')}</p>
-                  <button onClick={() => openProject(project)} className="px-4 py-2 bg-green-500 text-white text-sm hover:bg-green-600 transition-colors w-full md:w-auto text-center">View case study →</button>
+                  <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[10px] uppercase tracking-wider text-[var(--text-subtle)]">
+                    <span>{project.status.replace('-', ' ')}</span>
+                    <span className="h-1 w-1 rounded-full bg-[var(--terminal-green)]" />
+                    <span>{project.role}</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    <button onClick={() => openProject(project)} className="bg-green-500 px-4 py-2 text-sm text-white transition-colors hover:bg-green-600">View case study</button>
+                    {project.link !== "#" && <a href={project.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 border border-[var(--retro-border)] px-3 py-2 text-xs text-[var(--retro-fg)] transition hover:border-[var(--terminal-green)] hover:text-[var(--terminal-green)]"><span>Source</span><ExternalLinkIcon /></a>}
+                    {project.demo && <a href={project.demo} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 border border-[var(--retro-border)] px-3 py-2 text-xs text-[var(--retro-fg)] transition hover:border-[var(--terminal-green)] hover:text-[var(--terminal-green)]"><span>Live demo</span><ExternalLinkIcon /></a>}
+                  </div>
                 </div>
               </div>
             ))}
@@ -120,8 +129,11 @@ const ProjectsSection = () => {
                     ))}
                   </div>
                   
-                  <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">{project.status.replace('-', ' ')}</p>
-                  <button onClick={() => openProject(project)} className="text-sm text-green-600 hover:text-green-500">View case study →</button>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <button onClick={() => openProject(project)} className="text-sm text-green-600 transition-colors hover:text-green-500">View case study</button>
+                    {project.link !== "#" && <a href={project.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-[var(--text-muted)] transition hover:text-[var(--terminal-green)]"><span>Source</span><ExternalLinkIcon className="h-3 w-3" /></a>}
+                    {project.demo && <a href={project.demo} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-[var(--text-muted)] transition hover:text-[var(--terminal-green)]"><span>Live demo</span><ExternalLinkIcon className="h-3 w-3" /></a>}
+                  </div>
                 </div>
               </div>
             ))}

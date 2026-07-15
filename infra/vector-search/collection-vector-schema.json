@@ -1,0 +1,12 @@
+{
+  "embedding": {
+    "denseVector": {
+      "dimensions": 3072,
+      "vertexEmbeddingConfig": {
+        "modelId": "gemini-embedding-001",
+        "taskType": "RETRIEVAL_DOCUMENT",
+        "textTemplate": "{content}"
+      }
+    }
+  }
+}

@@ -48,6 +48,7 @@ export interface PortfolioData {
   cv: Experience[];
   projects: Project[];
   awards: string[];
+  awardLinks: { award: string; label: string; href: string }[];
 }
 
 export const portfolioData: PortfolioData = {
@@ -297,5 +298,17 @@ The background scheduler handles parallel execution of AI reasoning, compilation
     "Google DeepMind - Vibe Code Hackathon Winner (Kaggle/AI Studio: Top 50 Project out of 4,097 submissions)",
     "First Place: CodeAfrique & Art Exhibition Robotics Competition",
     "IT President: Kumasi Anglican Senior High School (Led 70+ students in programming)",
+  ],
+  awardLinks: [
+    {
+      award: "Google DeepMind - Vibe Code Hackathon Winner (Kaggle/AI Studio: Top 50 Project out of 4,097 submissions)",
+      label: "View Kaggle winners",
+      href: "https://www.kaggle.com/competitions/gemini-3/hackathon-winners",
+    },
+    {
+      award: "Google DeepMind - Vibe Code Hackathon Winner (Kaggle/AI Studio: Top 50 Project out of 4,097 submissions)",
+      label: "Read Neurostate write-up",
+      href: "https://www.kaggle.com/competitions/gemini-3/writeups/neurostate-ai-powered-embedded-systems-ide",
+    },
   ]
 };

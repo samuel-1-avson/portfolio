@@ -1,23 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { portfolioData } from "@/data/portfolio";
 import Typewriter from "@/components/effects/Typewriter";
 import ResumeModal from "@/components/ResumeModal";
+import { ExternalLinkIcon } from "@/components/icons/ExternalLinkIcon";
 
 type ChatAction = { label: string; href: string };
-type ChatMessage = { id: string; role: "visitor" | "assistant"; text: string; actions?: ChatAction[]; notice?: string };
+type RagSource = { sourceId: string; sourceTitle: string; kind: "profile" | "project" | "experience" | "education" | "award"; href?: string };
+type ChatMessage = { id: string; role: "visitor" | "assistant"; text: string; actions?: ChatAction[]; sources?: RagSource[]; retrieval?: "local" | "semantic"; notice?: string };
+type ChatHistoryItem = { role: "user" | "assistant"; text: string };
 
-async function callPortfolioAssistant(message: string) {
+const suggestedQuestions = [
+  "What makes NeuroBench distinctive?",
+  "Summarize Samuel's AI engineering experience.",
+  "How can I work with Samuel?",
+];
+
+async function callPortfolioAssistant(message: string, history: ChatHistoryItem[]) {
   try {
     const response = await fetch("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message }),
+      body: JSON.stringify({ message, history }),
     });
-    const data = await response.json().catch(() => null) as { response?: string; error?: string; actions?: ChatAction[]; notice?: string } | null;
+    const data = await response.json().catch(() => null) as { response?: string; error?: string; actions?: ChatAction[]; sources?: RagSource[]; retrieval?: "local" | "semantic"; notice?: string } | null;
     if (!response.ok) return { text: data?.error || "The assistant is unavailable. Please try again shortly." };
-    return { text: data?.response || "I could not prepare an answer. Please try another question.", actions: data?.actions, notice: data?.notice };
+    return { text: data?.response || "I could not prepare an answer. Please try another question.", actions: data?.actions, sources: data?.sources, retrieval: data?.retrieval, notice: data?.notice };
   } catch {
     return { text: "Connection error. Please try again or use the contact section below." };
   }
@@ -28,17 +37,28 @@ const HeroSection = () => {
   const [chatInput, setChatInput] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isTyping, setIsTyping] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
   const latestAssistant = [...messages].reverse().find((message) => message.role === "assistant");
+  const latestVisitor = [...messages].reverse().find((message) => message.role === "visitor");
+  const formattedResponse = latestAssistant?.text
+    .replace(/\*\*(.*?)\*\*/g, "$1")
+    .replace(/^[-*]\s/gm, "• ")
+    .trim();
 
   const ask = async (message: string) => {
     const question = message.trim();
     if (!question || isTyping) return;
+    const history = messages.slice(-6).map((message) => ({
+      role: message.role === "visitor" ? "user" as const : "assistant" as const,
+      text: message.text,
+    }));
     setChatInput("");
     setIsTyping(true);
     setMessages((current) => [...current, { id: `${Date.now()}-visitor`, role: "visitor", text: question }]);
-    const answer = await callPortfolioAssistant(question);
+    const answer = await callPortfolioAssistant(question, history);
     setMessages((current) => [...current, { id: `${Date.now()}-assistant`, role: "assistant", ...answer }]);
     setIsTyping(false);
+    inputRef.current?.focus();
   };
 
   return (
@@ -68,22 +88,43 @@ const HeroSection = () => {
               <button type="button" onClick={() => setIsResumeOpen(true)} className="border border-[var(--retro-border)] px-6 py-3 font-mono text-sm text-[var(--retro-fg)] transition-colors hover:border-green-500 hover:text-green-600">View Resume</button>
             </div>
 
-            <div className="mx-auto mt-8 max-w-md">
+            <div className="mx-auto mt-10 max-w-xl text-left">
+              <div className="border border-[var(--retro-border)] bg-[color:color-mix(in_srgb,var(--retro-card-bg)_94%,transparent)] p-3 shadow-[0_16px_48px_-32px_var(--terminal-glow)] sm:p-4">
+                <div className="mb-3 flex items-center justify-between gap-3 border-b border-[var(--retro-border)] pb-3">
+                  <div className="flex items-center gap-2 font-mono text-xs font-semibold tracking-wide text-[var(--retro-fg)]">
+                    <span className="size-2 rounded-full bg-[var(--terminal-green)] shadow-[0_0_10px_var(--terminal-glow)]" />
+                    PORTFOLIO COPILOT
+                  </div>
+                  <span className="font-mono text-[10px] uppercase tracking-wide text-[var(--text-subtle)]">Grounded in portfolio evidence</span>
+                </div>
               <form onSubmit={(event) => { event.preventDefault(); void ask(chatInput); }} className="relative">
                 <div className="flex items-center gap-2 border border-[var(--retro-border)] bg-[var(--retro-bg)] px-3 py-2">
                   <span className="font-mono text-sm text-green-600" aria-hidden="true">&gt;</span>
-                  <label className="sr-only" htmlFor="portfolio-question">Ask the portfolio assistant</label>
-                  <input id="portfolio-question" type="text" value={chatInput} onChange={(event) => setChatInput(event.target.value)} maxLength={800} disabled={isTyping} placeholder="Ask me anything about Samuel..." className="min-w-0 flex-1 bg-transparent font-mono text-sm text-[var(--retro-fg)] placeholder:text-[var(--retro-fg)]/30 outline-none" />
+                  <label className="sr-only" htmlFor="portfolio-question">Ask Samuel&apos;s portfolio assistant</label>
+                  <input ref={inputRef} id="portfolio-question" type="text" value={chatInput} onChange={(event) => setChatInput(event.target.value)} maxLength={800} disabled={isTyping} aria-describedby="portfolio-assistant-hint" placeholder="Ask about projects, experience, or collaboration..." className="min-w-0 flex-1 bg-transparent font-mono text-sm text-[var(--retro-fg)] placeholder:text-[var(--retro-fg)]/30 outline-none" />
                   <button type="submit" disabled={isTyping || !chatInput.trim()} className="font-mono text-xs text-green-600 transition-colors hover:text-green-500 disabled:opacity-50">[SEND]</button>
                 </div>
               </form>
+              <p id="portfolio-assistant-hint" className="mt-2 font-mono text-[11px] leading-5 text-[var(--text-subtle)]">Answers are grounded in retrieved portfolio evidence. Follow-up questions retain the recent conversation.</p>
+
+              {!latestAssistant && !isTyping && <div className="mt-3 flex flex-wrap gap-2" aria-label="Suggested questions">
+                {suggestedQuestions.map((question) => <button key={question} type="button" onClick={() => void ask(question)} className="border border-[var(--retro-border)] px-2.5 py-1.5 text-left font-mono text-[11px] text-[var(--text-muted)] transition hover:border-[var(--terminal-green)] hover:text-[var(--terminal-green)]">{question}</button>)}
+              </div>}
 
               {(latestAssistant || isTyping) && <div aria-live="polite" aria-atomic="true" className="mt-2 border border-[var(--retro-border)] bg-[var(--retro-bg)] p-3 text-left">
                 <div className="mb-1 flex items-center justify-between"><span className="font-mono text-xs text-green-600">$ response:</span>{messages.length > 0 && <button type="button" onClick={() => setMessages([])} className="font-mono text-[10px] text-[var(--retro-fg)]/40 hover:text-green-600">[CLEAR]</button>}</div>
-                <p className="font-mono text-sm leading-relaxed text-[var(--retro-fg)]/80">{isTyping ? <span className="animate-pulse">thinking...</span> : latestAssistant?.text}</p>
+                {latestVisitor && !isTyping && <p className="mb-2 truncate font-mono text-[11px] text-[var(--text-subtle)]">you &gt; {latestVisitor.text}</p>}
+                <div className="max-h-64 overflow-y-auto pr-1 font-mono text-sm leading-6 text-[var(--retro-fg)]/80 whitespace-pre-wrap break-words">{isTyping ? <span className="animate-pulse">thinking...</span> : formattedResponse}</div>
                 {latestAssistant?.notice && <p className="mt-2 font-mono text-xs text-[var(--retro-fg)]/40">{latestAssistant.notice}</p>}
+                {latestAssistant?.sources && latestAssistant.sources.length > 0 && <div className="mt-3 border-t border-[var(--retro-border)] pt-2">
+                  <p className="font-mono text-[10px] uppercase tracking-wider text-[var(--text-subtle)]">{latestAssistant.retrieval === "semantic" ? "Semantic retrieved evidence" : "Retrieved evidence"}</p>
+                  <div className="mt-1 flex flex-wrap gap-1.5">
+                    {latestAssistant.sources.map((source) => source.href ? <a key={source.sourceId} href={source.href} target="_blank" rel="noopener noreferrer" className="inline-flex max-w-full items-center gap-1 border border-[var(--retro-border)] px-2 py-1 font-mono text-[10px] text-[var(--text-muted)] transition hover:border-[var(--terminal-green)] hover:text-[var(--terminal-green)]"><span className="truncate">{source.sourceTitle}</span><ExternalLinkIcon className="h-3 w-3 shrink-0" /></a> : <span key={source.sourceId} className="max-w-full truncate border border-[var(--retro-border)] px-2 py-1 font-mono text-[10px] text-[var(--text-muted)]">{source.sourceTitle}</span>)}
+                  </div>
+                </div>}
                 {latestAssistant?.actions && <div className="mt-3 flex flex-wrap gap-2">{latestAssistant.actions.map((action) => <a key={action.href} href={action.href} target={action.href.startsWith("http") ? "_blank" : undefined} rel={action.href.startsWith("http") ? "noopener noreferrer" : undefined} className="border border-[var(--retro-border)] px-2 py-1 font-mono text-xs text-green-600 transition hover:border-green-500">[{action.label} →]</a>)}</div>}
               </div>}
+              </div>
             </div>
 
             <div className="mt-12 font-mono text-xs text-[var(--retro-fg)]/30">scroll ↓</div>
