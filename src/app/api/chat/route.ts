@@ -117,8 +117,10 @@ export async function POST(request: NextRequest) {
     return jsonError("The portfolio assistant has reached its daily request limit. Please use the contact details below.", 429, rateLimitHeaders);
   }
 
-  const apiKey = process.env.GEMINI_API_KEY;
-  const backend = process.env.GEMINI_BACKEND || "developer";
+  const apiKey = process.env.GEMINI_API_KEY || process.env.VERTEX_AI_API_KEY || process.env.VERTEX_API_KEY || process.env.GOOGLE_API_KEY;
+  const configuredBackend = process.env.GEMINI_BACKEND;
+  const isVertexKey = Boolean(process.env.VERTEX_AI_API_KEY || process.env.VERTEX_API_KEY);
+  const backend = configuredBackend || (isVertexKey ? "vertex" : "developer");
   const usesVertexAdc = backend === "vertex-adc";
   const retrievalQuery = [...historyValidation.history.filter((item) => item.role === "user").map((item) => item.text), validation.message].join(" ");
   const localEvidence = retrievePortfolioEvidence(retrievalQuery);
