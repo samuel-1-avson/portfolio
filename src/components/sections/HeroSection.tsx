@@ -5,6 +5,7 @@ import { portfolioData } from "@/data/portfolio";
 import Typewriter from "@/components/effects/Typewriter";
 import ResumeModal from "@/components/ResumeModal";
 import { ExternalLinkIcon } from "@/components/icons/ExternalLinkIcon";
+import { useOptionalGamification } from "@/components/gamification/GamificationProvider";
 
 type ChatAction = { label: string; href: string };
 type RagSource = { sourceId: string; sourceTitle: string; kind: "profile" | "project" | "experience" | "education" | "award"; href?: string };
@@ -38,6 +39,7 @@ const HeroSection = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const gamification = useOptionalGamification();
   const latestAssistant = [...messages].reverse().find((message) => message.role === "assistant");
   const latestVisitor = [...messages].reverse().find((message) => message.role === "visitor");
   const formattedResponse = latestAssistant?.text
@@ -54,11 +56,34 @@ const HeroSection = () => {
     }));
     setChatInput("");
     setIsTyping(true);
+    gamification?.addXP(20);
     setMessages((current) => [...current, { id: `${Date.now()}-visitor`, role: "visitor", text: question }]);
     const answer = await callPortfolioAssistant(question, history);
-    setMessages((current) => [...current, { id: `${Date.now()}-assistant`, role: "assistant", ...answer }]);
-    setIsTyping(false);
-    inputRef.current?.focus();
+    const assistantMsgId = `${Date.now()}-assistant`;
+
+    // Initialize assistant message with empty text for streaming effect
+    setMessages((current) => [
+      ...current,
+      { id: assistantMsgId, role: "assistant", text: "", actions: answer.actions, sources: answer.sources, retrieval: answer.retrieval, notice: answer.notice },
+    ]);
+
+    const fullText = answer.text;
+    let currentLen = 0;
+    const chunkSize = 4;
+    const interval = setInterval(() => {
+      currentLen += chunkSize;
+      if (currentLen >= fullText.length) {
+        currentLen = fullText.length;
+        clearInterval(interval);
+        setIsTyping(false);
+        inputRef.current?.focus();
+      }
+      setMessages((current) =>
+        current.map((msg) =>
+          msg.id === assistantMsgId ? { ...msg, text: fullText.slice(0, currentLen) } : msg
+        )
+      );
+    }, 15);
   };
 
   return (

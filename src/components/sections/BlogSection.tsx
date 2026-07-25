@@ -5,6 +5,21 @@ import BlogModal from "@/components/BlogModal";
 
 const blogPosts = [
   {
+    title: "Building a 285+ IPC Command Rust & Tauri IDE for Embedded Systems",
+    date: "July 18, 2026",
+    description: "How we architected NeuroBench using Tauri, SolidJS, and 30+ modular Rust engines to run cycle-accurate STM32/ESP32 hardware simulations without blocking the main UI loop.",
+    tags: ["#rust", "#tauri", "#embeddedsystems", "#architecture"],
+    githubUrl: "https://github.com/samuel-1-avson/Neurostate",
+    summary: "Building an embedded systems IDE requires ultra-low latency IPC and determinism. With Tauri (Rust + SolidJS), NeuroBench offloads compilation, simulation, and multi-agent AI reasoning to background Tokio tasks.\n\nKey architectural pillars:\n1. **Async Job Scheduler**: Prevents CPU spikes during firmware compilation.\n2. **Cycle-Accurate Simulation**: Simulates peripheral registers with zero GUI stutter.\n3. **Event-Sourced Canvas**: Enables infinite time-travel debugging and state reversal.",
+  },
+  {
+    title: "RAG Security Guardrails & Rate Limiting in Next.js 16",
+    date: "July 15, 2026",
+    description: "A practical guide to securing LLM endpoints against prompt injection, enforcing IP/daily token budgets, and serving grounded structured-data fallbacks when quota limits are reached.",
+    tags: ["#nextjs", "#ai", "#security", "#rag"],
+    summary: "Exposing an AI assistant on a public web portfolio introduces risk. In this post, we discuss the multi-tier defense strategy used for the Portfolio Assistant:\n\n1. **Prompt Injection Boundaries**: Strict system instruction isolation separating untrusted visitor text from system instructions.\n2. **Multi-Layer Rate Limiting**: Per-IP sliding window plus daily instance budgets.\n3. **Grounded Fallbacks**: Deterministic local RAG fallback ensuring visitors always get accurate portfolio answers.",
+  },
+  {
     title: "Video Fingerprinting",
     date: "December 12, 2023",
     description: "Video fingerprinting identifies videos by analyzing their visual content rather than file data. It creates a unique digital signature that allows systems to recognize a video even if it has been resized, compressed, or edited.",

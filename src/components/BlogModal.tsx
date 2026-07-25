@@ -10,7 +10,7 @@ interface BlogModalProps {
     date: string;
     description: string;
     tags: string[];
-    url: string;
+    url?: string;
     githubUrl?: string;
     summary?: string;
   } | null;
@@ -45,43 +45,45 @@ const BlogModal = ({ isOpen, onClose, post }: BlogModalProps) => {
         <div className="p-6">
           {showSummary ? (
             <div className="animate-fadeIn">
-               {/* Summary Header */}
-               <div className="mb-4 pb-2 border-b border-[var(--retro-border)] flex justify-between items-center">
-                  <span className="text-green-600 text-xs">$ cat summary_full.txt</span>
-                  <span className="text-[var(--retro-fg)]/40 text-xs">-- MORE --</span>
-               </div>
+              {/* Summary Header */}
+              <div className="mb-4 pb-2 border-b border-[var(--retro-border)] flex justify-between items-center">
+                <span className="text-green-600 text-xs">$ cat summary_full.txt</span>
+                <span className="text-[var(--retro-fg)]/40 text-xs">-- MORE --</span>
+              </div>
                
-               {/* Summary Content */}
-               <div className="text-sm text-[var(--retro-fg)]/90 leading-relaxed whitespace-pre-wrap h-[300px] overflow-y-auto custom-scrollbar mb-6 font-mono">
-                 {post.summary?.split('\n').map((line, i) => (
-                   <span key={i} className="block mb-2">
-                     {line.split('**').map((part, j) => 
-                       j % 2 === 1 ? <strong key={j} className="text-green-500">{part}</strong> : part
-                     )}
-                   </span>
-                 ))}
-               </div>
+              {/* Summary Content */}
+              <div className="text-sm text-[var(--retro-fg)]/90 leading-relaxed whitespace-pre-wrap h-[300px] overflow-y-auto custom-scrollbar mb-6 font-mono">
+                {post.summary?.split('\n').map((line, i) => (
+                  <span key={i} className="block mb-2">
+                    {line.split('**').map((part, j) => 
+                      j % 2 === 1 ? <strong key={j} className="text-green-500">{part}</strong> : part
+                    )}
+                  </span>
+                ))}
+              </div>
 
-               {/* Summary Actions */}
-               <div className="flex gap-3 pt-2">
-                 <button
-                   onClick={() => setShowSummary(false)}
-                   className="px-4 py-2 border border-[var(--retro-border)] text-sm text-[var(--retro-fg)] hover:border-green-500 hover:text-green-600 transition-colors"
-                 >
-                   ← Back to Overview
-                 </button>
-                 <a 
-                   href={post.url} 
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   className="px-4 py-2 bg-green-500 text-white text-sm hover:bg-green-600 transition-colors ml-auto flex items-center gap-2"
-                 >
-                   Open Source
-                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                     <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" />
-                   </svg>
-                 </a>
-               </div>
+              {/* Summary Actions */}
+              <div className="flex gap-3 pt-2">
+                <button
+                  onClick={() => setShowSummary(false)}
+                  className="px-4 py-2 border border-[var(--retro-border)] text-sm text-[var(--retro-fg)] hover:border-green-500 hover:text-green-600 transition-colors"
+                >
+                  ← Back to Overview
+                </button>
+                {post.url && (
+                  <a 
+                    href={post.url} 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 bg-green-500 text-white text-sm hover:bg-green-600 transition-colors ml-auto flex items-center gap-2"
+                  >
+                    Open Link
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" />
+                    </svg>
+                  </a>
+                )}
+              </div>
             </div>
           ) : (
             <div className="animate-fadeIn">
@@ -120,12 +122,24 @@ const BlogModal = ({ isOpen, onClose, post }: BlogModalProps) => {
 
               {/* Actions */}
               <div className="flex flex-wrap gap-3 pt-4 border-t border-[var(--retro-border)]">
-                <button 
-                  onClick={() => post.summary ? setShowSummary(true) : window.open(post.url, '_blank')}
-                  className="px-4 py-2 bg-green-500 text-white text-sm hover:bg-green-600 transition-colors"
-                >
-                  {post.summary ? 'Read Full Article' : 'Read Full Article'}
-                </button>
+                {post.summary && (
+                  <button 
+                    onClick={() => setShowSummary(true)}
+                    className="px-4 py-2 bg-green-500 text-white text-sm hover:bg-green-600 transition-colors"
+                  >
+                    Read Full Article
+                  </button>
+                )}
+                {post.url && !post.summary && (
+                  <a 
+                    href={post.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 bg-green-500 text-white text-sm hover:bg-green-600 transition-colors"
+                  >
+                    Read External Article
+                  </a>
+                )}
                 {post.githubUrl && (
                   <a 
                     href={post.githubUrl} 

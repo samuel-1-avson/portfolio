@@ -4,14 +4,17 @@ import { useState } from "react";
 import { portfolioData } from "@/data/portfolio";
 import ProjectModal from "@/components/ProjectModal";
 import { ExternalLinkIcon } from "@/components/icons/ExternalLinkIcon";
+import { useOptionalGamification } from "@/components/gamification/GamificationProvider";
 
 const ProjectsSection = () => {
   const [selectedProject, setSelectedProject] = useState<typeof portfolioData.projects[0] | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const gamification = useOptionalGamification();
 
   const openProject = (project: typeof portfolioData.projects[0]) => {
     setSelectedProject(project);
     setIsModalOpen(true);
+    gamification?.addXP(25);
   };
 
   // First two projects are featured

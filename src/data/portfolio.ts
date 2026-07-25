@@ -238,6 +238,24 @@ The background scheduler handles parallel execution of AI reasoning, compilation
       status: "concept",
       role: "Systems and security researcher",
       tech: ["Solidity", "Rust", "Blockchain", "Metadata", "Security"],
+      details: `
+# Chain Registry Ecosystem System Specification
+
+## Executive Summary
+The Chain Registry Ecosystem is a security-focused decentralization and supply-chain verification protocol. It guarantees registry integrity, immutable metadata provenance, and cryptographic verification of software packages and hardware firmwares across distributed ledgers.
+
+**Key Architecture Highlights**
+- Protocol Core: Solidity Smart Contracts with Merkle-Tree verification
+- Cryptographic Proofs: Zero-Knowledge & ECDSA state proof validation
+- Verification Engine: Rust-based off-chain indexer with deterministic replay
+- Governance: Multi-signature access control & decentralized registry voting
+
+## Core System Layers
+1. **On-Chain Registry**: ERC-721/1155 compliant metadata anchors on Ethereum/Polygon.
+2. **Off-Chain Verification Engine**: Async Rust indexer computing cryptographic hashes for hardware binaries.
+3. **Reproducible Build Auditor**: Deterministic build pipeline comparing artifact checksums against published on-chain root commitments.
+4. **Supply-Chain Security Guard**: Real-time vulnerability monitoring and automated revocation alerts.
+`,
     },
     {
       slug: "merchant-assistant",
@@ -247,6 +265,23 @@ The background scheduler handles parallel execution of AI reasoning, compilation
       status: "prototype",
       role: "Product and platform developer",
       tech: ["Rust", "Next.js", "Supabase", "OCR", "Analytics", "AI"],
+      details: `
+# AI Merchant Assistant Architecture & Specs
+
+## Executive Summary
+The AI Merchant Assistant is a full-stack platform engineered for retail merchants in emerging markets. It bridges physical point-of-sale activities with AI-driven inventory forecasting, receipt OCR, and voice-assisted transaction logging.
+
+**Key Platform Capabilities**
+- Voice Sales Recording: Speech-to-text NLP model parsing natural sales phrases into structured data
+- Receipt OCR Engine: Vision pipeline converting printed receipts to structured JSON entries
+- Real-Time Analytics: Axum/Rust backend serving inventory forecasting & low-stock alerts
+- Database & Sync: Supabase (PostgreSQL + Realtime) with offline-first local storage
+
+## System Workflow & Modules
+1. **Voice & Text Sales Logger**: Converts natural merchant utterances into structured transactions.
+2. **Smart Inventory Forecasting**: Time-series predictive model anticipating reorder dates based on sales velocity.
+3. **Receipt Scanner**: Extracts product names, quantities, and totals from camera/upload images.
+`,
     },
     {
       slug: "healthcare-no-show-prediction",
