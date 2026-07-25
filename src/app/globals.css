@@ -427,17 +427,25 @@ section { scroll-margin-top: 5rem; }
   }
 
   /* Custom Terminal Scrollbar */
+  .terminal-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--terminal-green) var(--retro-bg);
+  }
+
   .terminal-scrollbar::-webkit-scrollbar {
-    width: 6px;
+    width: 8px;
+    height: 8px;
   }
 
   .terminal-scrollbar::-webkit-scrollbar-track {
-    background: var(--retro-bg);
+    background: var(--retro-card-bg);
+    border-radius: 4px;
   }
 
   .terminal-scrollbar::-webkit-scrollbar-thumb {
     background: var(--terminal-green);
-    border-radius: 3px;
+    border-radius: 4px;
+    border: 2px solid var(--retro-card-bg);
   }
 
   .terminal-scrollbar::-webkit-scrollbar-thumb:hover {
