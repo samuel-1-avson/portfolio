@@ -146,103 +146,6 @@ export const portfolioData: PortfolioData = {
       role: "Blockchain / Gaming / AI Project Developer",
       company: "Independent Projects",
       period: "May 2025 – Present",
-}
-
-export const portfolioData: PortfolioData = {
-  personal: {
-    name: "Samuel Maxwell Obeng Avornyoh",
-    tagline: "AI/ML Engineer | Full-Stack Developer | Embedded Systems & Blockchain",
-    bio: "AI/ML Engineer with over 4 years of experience building machine learning models, AI systems, reliable data pipelines, and embedded-system design tools. Skilled in bridging the gap between advanced AI agents, full-stack web applications, and secure blockchain technologies.",
-    location: "Ghana",
-    phone: "+233547244783",
-    email: "samuelavson360@gmail.com",
-  },
-  socials: {
-    github: "https://github.com/samuel-1-avson",
-    linkedin: "https://www.linkedin.com/in/samuel-maxwell-obeng-avornyoh-b07763252/",
-    email: "samuelavson360@gmail.com",
-  },
-  skills: {
-    technical: [
-      "Data Engineering",
-      "AI Systems",
-      "MLOps",
-      "Blockchain",
-      "Machine Learning",
-      "Embedded System Design",
-      "Networking",
-      "Game Development",
-      "Data Visualization"
-    ],
-    tools: [
-      "Python",
-      "Rust",
-      "JavaScript/TypeScript",
-      "SQL",
-      "Bash",
-      "Solidity",
-      "Go",
-      "C/C++",
-      "FastAPI",
-      "Express.js",
-      "Axum/Rust",
-      "Redis",
-      "PostgreSQL/Supabase",
-      "Neo4j",
-      "RabbitMQ",
-      "Firebase",
-      "PyTorch",
-      "scikit-learn",
-      "LangChain",
-      "CrewAI",
-      "MLflow",
-      "RAG",
-      "Vector Databases",
-      "GCP",
-      "AWS",
-      "Docker",
-      "Kubernetes",
-      "Git/GitHub",
-      "LLMs",
-      "ANNOY",
-      "Chroma",
-      "Prometheus/Grafana"
-    ],
-    soft: [
-      "Adaptability",
-      "Problem-solving",
-      "Effective Communication",
-      "Collaboration",
-      "Leadership",
-      "Technical Documentation"
-    ],
-    languages: ["English", "Asante-Twi"]
-  },
-  education: [
-    {
-      degree: "BSc. Computer Science and Engineering",
-      school: "University of Mines and Technology, Tarkwa Ghana",
-      period: "Nov 2025",
-      details: "Academic Standing: Second Upper | CWA: 75.66. Relevant Coursework: Artificial Intelligence, Data Structures and Algorithms, Database Systems, Data Science Fundamentals, Probability and Statistics, Embedded System Design, Linear Algebra, Robotics"
-    }
-  ],
-  cv: [
-    {
-      role: "Full-Stack Developer",
-      company: "TonyCold Store Management System",
-      period: "May 2026 - Present",
-      description: "• Developed a business management system for a cold store dealing in frozen meat, fish, and related products.\n• Designed modules for product records, inventory tracking, sales/POS operations, stock movement, expense tracking, and business reporting.\n• Improved operational visibility by organizing product categories, pricing, sales summaries, and admin workflows for day-to-day store management."
-    },
-    {
-      role: "National Service Personnel / AI & Data Engineer",
-      company: "Really Great Tech",
-      period: "Dec. 2025 – Present",
-      description: "• Built and maintained an AI/Data training repository covering data analytics, SQL, dashboards, supervised ML, deployment, MLOps, LLM fundamentals, LangChain, RAG, and model evaluation.\n• Designed weekly workflows and milestone projects using Git/GitHub branches, pull requests, Python, Jupyter/VS Code, scikit-learn, SQL, and Google Looker Studio.\n• Developed learning materials and project documentation for business insights, ML microservices, and telecom policy assistant use cases."
-    },
-    {
-      role: "Blockchain / Gaming / AI Project Developer",
-      company: "Independent Projects",
-      period: "May 2025 – Present",
       description: "• Built game and blockchain prototypes including arcade-style games, Web3/crypto experiments, and AI-assisted development workflows.\n• Facilitated Web3, forex, and AI learning discussions across WhatsApp and LinkedIn communities.\n• Continued building portfolio projects in AI agents, embedded systems, trading systems, and full-stack web platforms."
     },
     {
@@ -316,7 +219,7 @@ The system operates as a modular OS for embedded development, separating concern
 
 ## Job Scheduler
 The background scheduler handles parallel execution of AI reasoning, compilation tasks, simulation threads, and device I/O without blocking the user interface.
-`
+`,
     },
     {
       slug: "music-companion",
