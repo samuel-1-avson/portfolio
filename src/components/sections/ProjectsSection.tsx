@@ -15,6 +15,7 @@ const ProjectsSection = () => {
     setSelectedProject(project);
     setIsModalOpen(true);
     gamification?.addXP(25);
+    gamification?.trackProjectView(project.slug);
   };
 
   // Split projects: Featured (has live demo) vs Other Explorations

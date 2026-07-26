@@ -6,6 +6,8 @@ import ThemeToggle from "./ThemeToggle";
 import XPBar from "@/components/gamification/XPBar";
 import CommandPaletteModal from "@/components/terminal/CommandPaletteModal";
 import ResumeModal from "@/components/ResumeModal";
+import AchievementsModal from "@/components/gamification/AchievementsModal";
+import { useOptionalGamification } from "@/components/gamification/GamificationProvider";
 
 const navLinks = [
   { name: "About", path: "#about" },
@@ -19,6 +21,7 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState("hero");
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const [resumeOpen, setResumeOpen] = useState(false);
+  const gamification = useOptionalGamification();
 
   useEffect(() => {
     const sections = ["hero", ...navLinks.map(({ path }) => path.slice(1))]
@@ -80,7 +83,14 @@ export default function Navbar() {
               </a>
             ))}
             <div className="h-4 w-px bg-[var(--retro-border)] mx-1" />
-            <XPBar compact showLevel={false} />
+            <button
+              type="button"
+              onClick={() => gamification?.openModal()}
+              title="Click to view rank & achievements"
+              className="cursor-pointer transition-opacity hover:opacity-80"
+            >
+              <XPBar compact showLevel={false} />
+            </button>
             <ThemeToggle />
           </nav>
 
@@ -101,7 +111,13 @@ export default function Navbar() {
         {menuOpen && (
           <nav id="mobile-navigation" aria-label="Mobile navigation" className="border-t border-[var(--retro-border)] bg-[var(--retro-bg)] p-3 md:hidden">
             <div className="container mx-auto grid max-w-6xl gap-2 px-2">
-              <XPBar compact className="py-2" />
+              <button
+                type="button"
+                onClick={() => { gamification?.openModal(); setMenuOpen(false); }}
+                className="w-full text-left py-2"
+              >
+                <XPBar compact />
+              </button>
               {navLinks.map((link) => (
                 <a key={link.path} href={link.path} onClick={(event) => navigate(event, link.path)} className="rounded-md px-4 py-3 font-mono text-sm text-[var(--retro-fg)] hover:bg-[var(--retro-hover)]">
                   {link.name}
@@ -121,6 +137,11 @@ export default function Navbar() {
       <ResumeModal
         isOpen={resumeOpen}
         onClose={() => setResumeOpen(false)}
+      />
+
+      <AchievementsModal
+        isOpen={Boolean(gamification?.isModalOpen)}
+        onClose={() => gamification?.closeModal()}
       />
     </>
   );

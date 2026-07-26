@@ -11,6 +11,7 @@ import {
   LEVEL_NAMES,
   Achievement,
 } from '@/lib/gamification';
+import { portfolioData } from '@/data/portfolio';
 
 interface GamificationContextType {
   state: GamificationState;
@@ -22,6 +23,10 @@ interface GamificationContextType {
   clearToast: () => void;
   trackCommand: (command: string) => void;
   trackScroll: (depth: number) => void;
+  trackProjectView: (slug: string) => void;
+  isModalOpen: boolean;
+  openModal: () => void;
+  closeModal: () => void;
 }
 
 const GamificationContext = createContext<GamificationContextType | null>(null);
@@ -43,6 +48,10 @@ interface GamificationProviderProps {
 export const GamificationProvider: React.FC<GamificationProviderProps> = ({ children }) => {
   const [state, setState] = useState<GamificationState>(() => loadGamificationState());
   const [pendingToast, setPendingToast] = useState<{ type: 'achievement' | 'levelup'; data: Achievement | number } | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = useCallback(() => setIsModalOpen(true), []);
+  const closeModal = useCallback(() => setIsModalOpen(false), []);
 
   // Initialize and check for first visit / return visitor
   useEffect(() => {
@@ -90,6 +99,44 @@ export const GamificationProvider: React.FC<GamificationProviderProps> = ({ chil
     return () => window.clearTimeout(timer);
   }, []);
 
+  // Global Konami Code Listener (↑ ↑ ↓ ↓ ← → ← → B A)
+  useEffect(() => {
+    const konamiSequence = [
+      "ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown",
+      "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight",
+      "b", "a"
+    ];
+    let sequenceIndex = 0;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+      const expectedKey = konamiSequence[sequenceIndex].length === 1
+        ? konamiSequence[sequenceIndex].toLowerCase()
+        : konamiSequence[sequenceIndex];
+
+      if (key === expectedKey) {
+        sequenceIndex++;
+        if (sequenceIndex === konamiSequence.length) {
+          sequenceIndex = 0;
+          setState((prev) => {
+            const result = unlockAchievementHelper(prev, "konami_code");
+            if (result.achievement) {
+              setPendingToast({ type: "achievement", data: result.achievement });
+              saveGamificationState(result.newState);
+              return result.newState;
+            }
+            return prev;
+          });
+        }
+      } else {
+        sequenceIndex = 0;
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   const addXP = useCallback((amount: number) => {
     setState(prev => {
       const result = addXPHelper(prev, amount);
@@ -120,14 +167,14 @@ export const GamificationProvider: React.FC<GamificationProviderProps> = ({ chil
         ? prev.commandsUsed
         : [...prev.commandsUsed, command];
       
-      const newState = { ...prev, commandsUsed: newCommands };
+      let newState = { ...prev, commandsUsed: newCommands };
       
       // Check for first command achievement
       if (newCommands.length === 1) {
         const result = unlockAchievementHelper(newState, 'first_command');
         if (result.achievement) {
           setPendingToast({ type: 'achievement', data: result.achievement });
-          return result.newState;
+          newState = result.newState;
         }
       }
       
@@ -136,14 +183,19 @@ export const GamificationProvider: React.FC<GamificationProviderProps> = ({ chil
         const result = unlockAchievementHelper(newState, 'help_command');
         if (result.achievement) {
           setPendingToast({ type: 'achievement', data: result.achievement });
-          return result.newState;
+          newState = result.newState;
         }
+      }
+
+      // Check for status or achievements command
+      if (['status', 'achievements', 'rank', 'profile'].includes(command.toLowerCase())) {
+        openModal();
       }
       
       saveGamificationState(newState);
       return newState;
     });
-  }, []);
+  }, [openModal]);
 
   const trackScroll = useCallback((depth: number) => {
     setState(prev => {
@@ -165,6 +217,28 @@ export const GamificationProvider: React.FC<GamificationProviderProps> = ({ chil
     });
   }, []);
 
+  const trackProjectView = useCallback((slug: string) => {
+    setState((prev) => {
+      const currentViewed = prev.projectsViewed || [];
+      if (currentViewed.includes(slug)) return prev;
+
+      const newViewed = [...currentViewed, slug];
+      let newState = { ...prev, projectsViewed: newViewed };
+
+      // Check if all portfolio projects have been viewed
+      if (newViewed.length >= portfolioData.projects.length) {
+        const result = unlockAchievementHelper(newState, "all_projects");
+        if (result.achievement) {
+          setPendingToast({ type: "achievement", data: result.achievement });
+          newState = result.newState;
+        }
+      }
+
+      saveGamificationState(newState);
+      return newState;
+    });
+  }, []);
+
   const value: GamificationContextType = {
     state,
     addXP,
@@ -175,6 +249,10 @@ export const GamificationProvider: React.FC<GamificationProviderProps> = ({ chil
     clearToast,
     trackCommand,
     trackScroll,
+    trackProjectView,
+    isModalOpen,
+    openModal,
+    closeModal,
   };
 
   return (

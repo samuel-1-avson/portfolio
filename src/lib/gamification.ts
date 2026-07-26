@@ -14,6 +14,7 @@ export interface GamificationState {
   level: number;
   achievements: Achievement[];
   commandsUsed: string[];
+  projectsViewed: string[];
   visitCount: number;
   scrollDepth: number;
   lastVisit: Date | null;
@@ -177,6 +178,7 @@ export const getDefaultState = (): GamificationState => ({
   level: 1,
   achievements: ACHIEVEMENTS.map(a => ({ ...a })),
   commandsUsed: [],
+  projectsViewed: [],
   visitCount: 0,
   scrollDepth: 0,
   lastVisit: null,
