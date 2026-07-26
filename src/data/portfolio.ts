@@ -146,6 +146,103 @@ export const portfolioData: PortfolioData = {
       role: "Blockchain / Gaming / AI Project Developer",
       company: "Independent Projects",
       period: "May 2025 – Present",
+}
+
+export const portfolioData: PortfolioData = {
+  personal: {
+    name: "Samuel Maxwell Obeng Avornyoh",
+    tagline: "AI/ML Engineer | Full-Stack Developer | Embedded Systems & Blockchain",
+    bio: "AI/ML Engineer with over 4 years of experience building machine learning models, AI systems, reliable data pipelines, and embedded-system design tools. Skilled in bridging the gap between advanced AI agents, full-stack web applications, and secure blockchain technologies.",
+    location: "Ghana",
+    phone: "+233547244783",
+    email: "samuelavson360@gmail.com",
+  },
+  socials: {
+    github: "https://github.com/samuel-1-avson",
+    linkedin: "https://www.linkedin.com/in/samuel-maxwell-obeng-avornyoh-b07763252/",
+    email: "samuelavson360@gmail.com",
+  },
+  skills: {
+    technical: [
+      "Data Engineering",
+      "AI Systems",
+      "MLOps",
+      "Blockchain",
+      "Machine Learning",
+      "Embedded System Design",
+      "Networking",
+      "Game Development",
+      "Data Visualization"
+    ],
+    tools: [
+      "Python",
+      "Rust",
+      "JavaScript/TypeScript",
+      "SQL",
+      "Bash",
+      "Solidity",
+      "Go",
+      "C/C++",
+      "FastAPI",
+      "Express.js",
+      "Axum/Rust",
+      "Redis",
+      "PostgreSQL/Supabase",
+      "Neo4j",
+      "RabbitMQ",
+      "Firebase",
+      "PyTorch",
+      "scikit-learn",
+      "LangChain",
+      "CrewAI",
+      "MLflow",
+      "RAG",
+      "Vector Databases",
+      "GCP",
+      "AWS",
+      "Docker",
+      "Kubernetes",
+      "Git/GitHub",
+      "LLMs",
+      "ANNOY",
+      "Chroma",
+      "Prometheus/Grafana"
+    ],
+    soft: [
+      "Adaptability",
+      "Problem-solving",
+      "Effective Communication",
+      "Collaboration",
+      "Leadership",
+      "Technical Documentation"
+    ],
+    languages: ["English", "Asante-Twi"]
+  },
+  education: [
+    {
+      degree: "BSc. Computer Science and Engineering",
+      school: "University of Mines and Technology, Tarkwa Ghana",
+      period: "Nov 2025",
+      details: "Academic Standing: Second Upper | CWA: 75.66. Relevant Coursework: Artificial Intelligence, Data Structures and Algorithms, Database Systems, Data Science Fundamentals, Probability and Statistics, Embedded System Design, Linear Algebra, Robotics"
+    }
+  ],
+  cv: [
+    {
+      role: "Full-Stack Developer",
+      company: "TonyCold Store Management System",
+      period: "May 2026 - Present",
+      description: "• Developed a business management system for a cold store dealing in frozen meat, fish, and related products.\n• Designed modules for product records, inventory tracking, sales/POS operations, stock movement, expense tracking, and business reporting.\n• Improved operational visibility by organizing product categories, pricing, sales summaries, and admin workflows for day-to-day store management."
+    },
+    {
+      role: "National Service Personnel / AI & Data Engineer",
+      company: "Really Great Tech",
+      period: "Dec. 2025 – Present",
+      description: "• Built and maintained an AI/Data training repository covering data analytics, SQL, dashboards, supervised ML, deployment, MLOps, LLM fundamentals, LangChain, RAG, and model evaluation.\n• Designed weekly workflows and milestone projects using Git/GitHub branches, pull requests, Python, Jupyter/VS Code, scikit-learn, SQL, and Google Looker Studio.\n• Developed learning materials and project documentation for business insights, ML microservices, and telecom policy assistant use cases."
+    },
+    {
+      role: "Blockchain / Gaming / AI Project Developer",
+      company: "Independent Projects",
+      period: "May 2025 – Present",
       description: "• Built game and blockchain prototypes including arcade-style games, Web3/crypto experiments, and AI-assisted development workflows.\n• Facilitated Web3, forex, and AI learning discussions across WhatsApp and LinkedIn communities.\n• Continued building portfolio projects in AI agents, embedded systems, trading systems, and full-stack web platforms."
     },
     {
@@ -161,6 +258,7 @@ export const portfolioData: PortfolioData = {
       title: "FSM Designer / NeuroBench",
       description: "A graphical finite-state-machine editor and professional-grade embedded systems IDE built with Tauri (Rust + SolidJS). Features visual FSM design with cycle-accurate simulation, templates, C/Python code export, AI-assisted debugging, 90+ IPC commands, and real-time performance monitoring.",
       link: "https://github.com/samuel-1-avson/Neurostate",
+      demo: "https://neurostate.ai.studio",
       status: "open-source",
       role: "Product and systems developer",
       tech: ["Rust", "Tauri", "SolidJS", "TypeScript", "STM32", "probe-rs"],
@@ -233,9 +331,10 @@ The background scheduler handles parallel execution of AI reasoning, compilation
     {
       slug: "chain-registry",
       title: "Chain Registry Ecosystem",
-      description: "Explored a Chain Registry Ecosystem project focused on registry integrity, blockchain metadata management, reproducible verification, governance, auditability, and supply-chain security.",
-      link: "#",
-      status: "concept",
+      description: "A security-focused Chain Registry Ecosystem project focused on registry integrity, blockchain metadata management, reproducible verification, governance, auditability, and supply-chain security.",
+      link: "https://contribute.cregnet.dev/",
+      demo: "https://contribute.cregnet.dev/",
+      status: "open-source",
       role: "Systems and security researcher",
       tech: ["Solidity", "Rust", "Blockchain", "Metadata", "Security"],
       details: `
@@ -256,6 +355,26 @@ The Chain Registry Ecosystem is a security-focused decentralization and supply-c
 3. **Reproducible Build Auditor**: Deterministic build pipeline comparing artifact checksums against published on-chain root commitments.
 4. **Supply-Chain Security Guard**: Real-time vulnerability monitoring and automated revocation alerts.
 `,
+    },
+    {
+      slug: "proxy-marketplace",
+      title: "ProxyHub / Proxy Marketplace",
+      description: "Built ProxyHub, a high-performance proxy marketplace and recommendation platform involving networking, proxy routing architecture, usage-based billing, scoring, and real-time proxy analytics.",
+      link: "https://proxyhubb.com/",
+      demo: "https://proxyhubb.com/",
+      status: "open-source",
+      role: "Full-stack and systems developer",
+      tech: ["Go", "Python", "Networking", "Architecture", "Billing", "React"],
+    },
+    {
+      slug: "web3-arcade",
+      title: "Web3 Gaming Arcade Platform",
+      description: "Developed an arcade gaming platform featuring Web3 crypto integrations, HTML5 Canvas game mechanics, Firebase real-time state, and interactive play-to-earn/reward workflows.",
+      link: "https://arcade-7f03c.web.app/",
+      demo: "https://arcade-7f03c.web.app/",
+      status: "open-source",
+      role: "Blockchain & Game developer",
+      tech: ["React", "Firebase", "Web3", "JavaScript", "HTML5 Canvas"],
     },
     {
       slug: "merchant-assistant",
@@ -291,15 +410,6 @@ The AI Merchant Assistant is a full-stack platform engineered for retail merchan
       status: "open-source",
       role: "ML and platform developer",
       tech: ["FastAPI", "React", "MLflow", "Redis", "RabbitMQ", "PostgreSQL", "Prometheus", "Grafana"],
-    },
-    {
-      slug: "proxy-marketplace",
-      title: "Proxy Marketplace",
-      description: "Designed proxy marketplace and recommendation-feed algorithm prototypes involving networking, marketplace architecture, usage-based billing, retrieval, ranking, scoring, and personalization.",
-      link: "#",
-      status: "prototype",
-      role: "Architecture and ranking systems designer",
-      tech: ["Go", "Python", "Networking", "Architecture", "Recommendation Alg"],
     },
     {
       slug: "crypto-pos",
