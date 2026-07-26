@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import { useGamification } from "./GamificationProvider";
-import { LEVEL_NAMES } from "@/lib/gamification";
 
 interface AchievementsModalProps {
   isOpen: boolean;
