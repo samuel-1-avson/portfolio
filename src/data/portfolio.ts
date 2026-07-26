@@ -137,9 +137,15 @@ export const portfolioData: PortfolioData = {
       description: "• Developed a business management system for a cold store dealing in frozen meat, fish, and related products.\n• Designed modules for product records, inventory tracking, sales/POS operations, stock movement, expense tracking, and business reporting.\n• Improved operational visibility by organizing product categories, pricing, sales summaries, and admin workflows for day-to-day store management."
     },
     {
+      role: "National Service Personnel / IT Technician",
+      company: "Sefwiman Community Bank",
+      period: "Mar. 2026 – September 2026",
+      description: "• Maintaining Networking systems and troubleshooting.\n• Engaging in Bank Operations and Cyber Security."
+    },
+    {
       role: "National Service Personnel / AI & Data Engineer",
       company: "Really Great Tech",
-      period: "Dec. 2025 – Present",
+      period: "Dec. 2025 – March 2026",
       description: "• Built and maintained an AI/Data training repository covering data analytics, SQL, dashboards, supervised ML, deployment, MLOps, LLM fundamentals, LangChain, RAG, and model evaluation.\n• Designed weekly workflows and milestone projects using Git/GitHub branches, pull requests, Python, Jupyter/VS Code, scikit-learn, SQL, and Google Looker Studio.\n• Developed learning materials and project documentation for business insights, ML microservices, and telecom policy assistant use cases."
     },
     {
@@ -331,6 +337,15 @@ The AI Merchant Assistant is a full-stack platform engineered for retail merchan
       status: "prototype",
       role: "Data and reliability developer",
       tech: ["Python", "Redis", "Scraping", "NLP", "Fuzzy Matching", "Rate Limiting"],
+    },
+    {
+      slug: "sound-anomaly-detection",
+      title: "Sound Anomaly Detection System",
+      description: "Designed a sound anomaly detection system for industrial machinery to detect mechanical faults, acoustic signatures, and operational anomalies in heavy machines.",
+      link: "#",
+      status: "prototype",
+      role: "ML and signal processing developer",
+      tech: ["Python", "TensorFlow", "Audio Processing", "CNN", "Signal Processing", "Anomaly Detection"],
     },
     {
       slug: "sign-language-detection",
