@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useGamification } from "./GamificationProvider";
+import AchievementIcon from "@/components/icons/AchievementIcons";
 
 interface AchievementsModalProps {
   isOpen: boolean;
@@ -112,7 +113,9 @@ export default function AchievementsModal({ isOpen, onClose }: AchievementsModal
               >
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <div className="flex items-center gap-2.5">
-                    <span className="text-2xl select-none">{ach.icon}</span>
+                    <div className={`p-2 border ${ach.unlocked ? "border-green-500/50 bg-green-500/20 text-green-500" : "border-[var(--retro-border)] text-[var(--retro-fg)]/40"}`}>
+                      <AchievementIcon id={ach.id} className="h-5 w-5" />
+                    </div>
                     <div>
                       <h3 className={`font-bold text-sm ${ach.unlocked ? "text-green-500" : "text-[var(--retro-fg)]"}`}>
                         {ach.name}

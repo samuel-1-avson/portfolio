@@ -54,7 +54,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     name: 'BOOT_SEQUENCE',
     description: 'First system boot completed',
     xp: 10,
-    icon: '🚀',
+    icon: 'rocket',
     unlocked: false,
   },
   {
@@ -62,7 +62,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     name: 'DEEP_DIVE',
     description: 'Scrolled through entire portfolio',
     xp: 25,
-    icon: '📜',
+    icon: 'scroll',
     unlocked: false,
   },
   {
@@ -70,7 +70,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     name: 'TERMINAL_OPERATOR',
     description: 'Used first terminal command',
     xp: 15,
-    icon: '⌨️',
+    icon: 'terminal',
     unlocked: false,
   },
   {
@@ -78,7 +78,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     name: 'RTFM',
     description: 'Read the friendly manual',
     xp: 10,
-    icon: '📖',
+    icon: 'book',
     unlocked: false,
   },
   {
@@ -86,7 +86,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     name: 'HACKER',
     description: 'Discovered a secret command',
     xp: 50,
-    icon: '🔓',
+    icon: 'lock_open',
     unlocked: false,
   },
   {
@@ -94,7 +94,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     name: 'PORTFOLIO_REVIEWER',
     description: 'Viewed all projects',
     xp: 30,
-    icon: '👁️',
+    icon: 'eye',
     unlocked: false,
   },
   {
@@ -102,7 +102,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     name: 'RETRO_GAMER',
     description: 'Entered the Konami code',
     xp: 100,
-    icon: '🎮',
+    icon: 'gamepad',
     unlocked: false,
   },
   {
@@ -110,7 +110,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     name: 'NIGHT_OWL',
     description: 'Visited between midnight and 4 AM',
     xp: 25,
-    icon: '🦉',
+    icon: 'moon',
     unlocked: false,
   },
   {
@@ -118,7 +118,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     name: 'REGULAR',
     description: 'Returned for another visit',
     xp: 20,
-    icon: '🔄',
+    icon: 'refresh',
     unlocked: false,
   },
   {
@@ -126,7 +126,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     name: 'SPEED_DAEMON',
     description: 'Typed over 60 WPM in typing game',
     xp: 75,
-    icon: '⚡',
+    icon: 'bolt',
     unlocked: false,
   },
 ];

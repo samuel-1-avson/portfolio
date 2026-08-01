@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import { useGamification } from './GamificationProvider';
 import { Achievement, LEVEL_NAMES } from '@/lib/gamification';
+import AchievementIcon from '@/components/icons/AchievementIcons';
 
 const AchievementToast: React.FC = () => {
   const { pendingToast, clearToast } = useGamification();
@@ -30,7 +31,9 @@ const AchievementToast: React.FC = () => {
         {isAchievement && achievement ? (
           <div className="relative z-10">
             <div className="flex items-center gap-3 mb-2">
-              <span className="text-2xl select-none">{achievement.icon}</span>
+              <div className="p-2 border border-green-500/50 bg-green-500/20 text-green-500">
+                <AchievementIcon id={achievement.id} className="h-6 w-6" />
+              </div>
               <div className="flex-1">
                 <div className="text-xs font-bold text-amber-400 tracking-wider">
                   ACHIEVEMENT_UNLOCKED
