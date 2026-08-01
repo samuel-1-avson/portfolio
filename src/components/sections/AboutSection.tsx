@@ -163,13 +163,10 @@ const AboutSection = () => {
                       {education.school}
                     </p>
 
-                    {/* Academic Standing & CWA Badges */}
+                    {/* Academic Standing Badge */}
                     <div className="flex flex-wrap gap-2 mb-5">
                       <span className="px-2.5 py-1 text-xs border border-green-500/40 text-green-600 bg-green-500/10 font-bold">
                         Standing: Second Upper
-                      </span>
-                      <span className="px-2.5 py-1 text-xs border border-[var(--terminal-cyan)]/40 text-[var(--terminal-cyan)] bg-[var(--terminal-cyan)]/10 font-bold">
-                        CWA: 75.66
                       </span>
                     </div>
 

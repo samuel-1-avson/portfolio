@@ -126,7 +126,7 @@ export const portfolioData: PortfolioData = {
       degree: "BSc. Computer Science and Engineering",
       school: "University of Mines and Technology, Tarkwa Ghana",
       period: "Nov 2025",
-      details: "Academic Standing: Second Upper | CWA: 75.66. Relevant Coursework: Artificial Intelligence, Data Structures and Algorithms, Database Systems, Data Science Fundamentals, Probability and Statistics, Embedded System Design, Linear Algebra, Robotics"
+      details: "Academic Standing: Second Upper. Relevant Coursework: Artificial Intelligence, Data Structures and Algorithms, Database Systems, Data Science Fundamentals, Probability and Statistics, Embedded System Design, Linear Algebra, Robotics"
     }
   ],
   cv: [
