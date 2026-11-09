@@ -1,5 +1,14 @@
 import { GoogleAuth } from "google-auth-library";
-import { portfolioKnowledgeBase } from "../src/lib/portfolio-rag.ts";
+import { knowledgeBase } from "../src/lib/assistant/knowledge.ts";
+
+// Same document shape the collection schema expects (infra/vector-search).
+const portfolioKnowledgeBase = knowledgeBase.map((document) => ({
+  text: document.text,
+  sourceId: document.sourceId,
+  sourceTitle: document.title,
+  kind: document.kind,
+  href: document.href,
+}));
 
 const [project, location = "us-central1", collection = "samuel-portfolio-rag"] = process.argv.slice(2);
 
@@ -20,7 +29,7 @@ async function wait(milliseconds: number) {
   await new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
 
-async function request(url: string, method: "GET" | "POST" | "PATCH", body?: unknown) {
+async function request(url: string, method: "GET" | "POST" | "PATCH" | "DELETE", body?: unknown) {
   for (let attempt = 0; attempt < 8; attempt += 1) {
     const response = await fetch(url, {
       method,
@@ -87,4 +96,15 @@ for (const [index, evidence] of portfolioKnowledgeBase.entries()) {
   created += 1;
 }
 
-console.log(`Vector Search sync complete: ${created} created, ${updated} updated, ${skipped} unchanged, ${portfolioKnowledgeBase.length} total.`);
+// Remove objects left over from a previous, larger knowledge base.
+let removed = 0;
+for (let index = portfolioKnowledgeBase.length + 1; index < portfolioKnowledgeBase.length + 500; index += 1) {
+  const staleId = `rag-${String(index).padStart(3, "0")}`;
+  const existing = await request(`${endpoint}/${staleId}`, "GET");
+  if (existing.status === 404) break;
+  const deleted = await request(`${endpoint}/${staleId}`, "DELETE");
+  if (!deleted.ok) throw new Error(`Unable to delete stale ${staleId}: ${deleted.status} ${await deleted.text()}`);
+  removed += 1;
+}
+
+console.log(`Vector Search sync complete: ${created} created, ${updated} updated, ${skipped} unchanged, ${removed} removed, ${portfolioKnowledgeBase.length} total.`);
