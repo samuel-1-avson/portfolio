@@ -1,10 +1,10 @@
 # Final modernization report
 
-Date: 9 November 2026 · Branch: `feat/portfolio-modernization` (from `main` at `f04566c`) · **Not committed, pushed or deployed** — all changes are in the working tree for review.
+Date: 9 November 2026 · Branch: `feat/portfolio-modernization` (from `main` at `f04566c`) · Commit `ff55b60` (DCO signed off) · Merged to `main` via [PR #1](https://github.com/samuel-1-avson/portfolio/pull/1) as `cd76da3` at 21:32 UTC · **Deployed to production** at <https://samuel-seven-gamma.vercel.app> — see [Production deployment](#production-deployment).
 
 ## Outcome in one paragraph
 
-The portfolio was rebuilt in place on its existing Next.js stack as a multi-page, black-and-white site whose every project claim traces to a GitHub repository. The four priority projects — BitMomo, ProxyHubb, CipherVault and CREG — were investigated in their repositories and now lead the site as case studies alongside NeuroBench, with honest status wording (testnet, public alpha, released). Gamification, terminal effects, the canvas background and ~50 dead or obsolete files were removed. The AI assistant was rebuilt with real token streaming, a knowledge base generated from the same content as the pages, project recommendations, deterministic contact/greeting answers, a full fallback when the model is unavailable, and fixes to its input-size and logging gaps. A new HTML résumé and a two-page PDF are generated from the same data. Lint, typecheck, 34 unit tests and the production build pass; Lighthouse accessibility, best-practices and SEO are 100 on every measured page.
+The portfolio was rebuilt in place on its existing Next.js stack as a multi-page, black-and-white site whose every project claim traces to a GitHub repository. The four priority projects — BitMomo, ProxyHubb, CipherVault and CREG — were investigated in their repositories and now lead the site as case studies alongside NeuroBench, with honest status wording (testnet, public alpha, released). Gamification, terminal effects, the canvas background and ~50 dead or obsolete files were removed. The AI assistant was rebuilt with real token streaming, a knowledge base generated from the same content as the pages, project recommendations, deterministic contact/greeting answers, a full fallback when the model is unavailable, and fixes to its input-size and logging gaps. A new HTML résumé and a two-page PDF are generated from the same data. Lint, typecheck, 34 unit tests and the production build pass; Lighthouse accessibility, best-practices and SEO are 100 on every measured page. The work was merged through PR #1 and is live in production, where the assistant answers through Gemini.
 
 ## What changed
 
@@ -67,7 +67,19 @@ Mobile (default simulated throttling):
 
 Desktop preset: **100 / 100 / 100 / 100** on all five pages (LCP 0.6 s).
 
-Notes: measured on `localhost` (no CDN, no HTTP/2), before the final Next 16.4.5 upgrade; production numbers on Vercel will differ. Two runs failed with Lighthouse's `NO_NAVSTART` trace error and were re-run. The first mobile run (before removing the opacity fade from the page entrance) scored 88–93; the case-study page had one heading-order issue (fixed).
+Notes: measured on `localhost` (no CDN, no HTTP/2), before the final Next 16.4.5 upgrade; production numbers on Vercel will differ and were not re-measured. Two runs failed with Lighthouse's `NO_NAVSTART` trace error and were re-run. The first mobile run (before removing the opacity fade from the page entrance) scored 88–93; the case-study page had one heading-order issue (fixed).
+
+## Production deployment
+
+| Step | Result |
+| --- | --- |
+| Pull request | [PR #1](https://github.com/samuel-1-avson/portfolio/pull/1), ready for review. Checks on `ff55b60`: DCO ✔ (after amending with a sign-off), GitGuardian ✔, Vercel previews ✔ for both projects. The two `verify` CI runs could not start: *"The job was not started because your account is locked due to a billing issue."* Lint, typecheck, tests and build were run locally instead (all pass). |
+| Merge | Merge commit `cd76da3` into `main`, pinned to head `ff55b60`, 21:32 UTC, 9 Nov 2026. Branch kept. |
+| Vercel | Vercel's GitHub integration deployed production for both linked projects from `cd76da3`: **`samuel`** (serves `samuel-seven-gamma.vercel.app`) and **`portfolio`**. Both reported `success` within about two minutes. The Vercel CLI on the build machine was logged out and was not used. |
+| Public routes | `https://samuel-seven-gamma.vercel.app`: 200 for `/`, `/work`, `/work/bitmomo`, `/work/ciphervault`, `/about`, `/resume`, `/resume.pdf`, `/sitemap.xml`, `/robots.txt`, `/opengraph-image`; 404 for an unknown path; no old-site markup (Konami, XP bar, achievements, terminal green, typewriter); CSP and `X-Frame-Options: DENY` present. Home page checked visually in a browser. |
+| Live assistant | A Gemini key **is** configured on Vercel, so production answers in `model` mode with streamed tokens. Three example questions were answered accurately in 1–2 s: BitMomo (described as a cloud testnet system, links bitmomo.app), CipherVault's stack (exact list), and best architecture example (BitMomo, CREG, CipherVault with correct reasons). |
+
+Previews created by the integration redirect to Vercel sign-in (deployment protection), so only the account owner can view them.
 
 ## Acceptance criteria
 
@@ -79,16 +91,16 @@ Notes: measured on `localhost` (no CDN, no HTTP/2), before the final Next 16.4.5
 | GitHub analysed; portfolio represents significant current work | **Met** — with the gaps listed below |
 | ProxySocialHub, CipherVault, BitMomo, CREG investigated and represented with evidence | **Met** |
 | Compelling technical case studies for selected projects | **Met** — 5 case studies; no screenshots yet |
-| Assistant more accurate, useful, secure, integrated | **Met in code and tests; live Gemini path not verified** (no credential available here) |
+| Assistant more accurate, useful, secure, integrated | **Met** — unit tests, local API checks, and live Gemini answers on production verified after deployment |
 | CV reflects verified experience and projects | **Met, pending owner confirmation** of the items in the CV report |
 | Simpler, purposeful navigation | **Met** — Work, About, Résumé, Contact + Ask AI |
 | Accessibility expectations on important pages | **Met** — Lighthouse a11y 100; keyboard paths checked. Not a full manual WCAG 2.2 audit with a screen reader |
-| Builds and passes tests | **Met** |
+| Builds and passes tests | **Met** locally; GitHub Actions blocked by an account billing lock |
 | Implementation and limitations documented | **Met** — eight documents in this folder |
 
 ## Known issues and limitations
 
-1. **Live AI not exercised.** `.env.local` does not exist, so answers in this session came from the portfolio-data path. The model path is covered by unit tests with fake streams only.
+1. **GitHub Actions cannot run** until the account billing lock is cleared, so CI (`verify`) and the weekly GitHub-snapshot workflow will not execute. Checks were run locally for this release.
 2. **Rate limiting is per instance** (in memory). Adequate for a portfolio; use a shared store for high traffic.
 3. **No project screenshots.** Most strong projects are private; images need owner approval.
 4. **Unverified items withheld** (two awards, CWA, "4,097 submissions"); **no evidence found** for mining-technology or fleet-management work.
@@ -100,8 +112,8 @@ Notes: measured on `localhost` (no CDN, no HTTP/2), before the final Next 16.4.5
 
 ## Recommended next steps
 
-1. Review the owner questions in [CV_UPDATE_REPORT.md](CV_UPDATE_REPORT.md) and correct `src/content/profile.ts` where needed.
-2. Commit on this branch, push and open a pull request; let Vercel build a preview.
-3. Add the Gemini key to the Vercel project (server-side variable) and ask the six example questions on the preview.
-4. Review the preview on a real phone; then merge.
+1. Review the owner questions in [CV_UPDATE_REPORT.md](CV_UPDATE_REPORT.md) and correct `src/content/profile.ts` where needed — the current answers are now public.
+2. Clear the GitHub billing lock so CI and the weekly metadata sync can run again.
+3. Check the live site on a real phone.
+4. Set the git `user.email` to a real address; the release commit carries the placeholder `samuel.avornyoh@example.com`.
 5. Follow [IMPLEMENTATION_ROADMAP.md](IMPLEMENTATION_ROADMAP.md) for screenshots, a shared rate limiter, an assistant evaluation set and Playwright smoke tests.

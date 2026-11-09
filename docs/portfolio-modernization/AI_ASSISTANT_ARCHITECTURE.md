@@ -116,7 +116,9 @@ See [`.env.example`](../../.env.example). With no AI credentials the assistant s
 - Live API checks against the production build: 200 NDJSON with `meta → delta → done`; 400 (bad JSON, bad history), 403 (foreign `Origin`), 405 (GET), 413 (20 KB body, 900-char message), 415 (wrong content type), 429 after the per-minute limit.
 - Browser check: panel opens from the header, suggested question answered with a related-project card, actions and sources.
 
-**Not verified:** live Gemini responses. No AI credential is present in this environment (`.env.local` does not exist), so the model path was exercised only with fake streams in tests. Before relying on it in production, set the key on Vercel and ask the six example questions once.
+- **Production (after deployment, 9 Nov 2026):** a Gemini key is configured on Vercel. `POST /api/chat` on `https://samuel-seven-gamma.vercel.app` returned 200 NDJSON in `model` mode with several streamed `delta` events. Three example questions were answered accurately in 1–2 s: BitMomo (kept the "cloud testnet system" status and linked bitmomo.app), CipherVault's technologies (exact stack), and the best architecture example (BitMomo, CREG, CipherVault, with correct reasons).
+
+No AI credential exists in the local development environment (`.env.local` is absent), so local runs use the portfolio-data path.
 
 ## Limitations and next steps
 

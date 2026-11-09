@@ -47,7 +47,7 @@ Acceptance: build passes; no green/colour accents; 375px without horizontal scro
 
 - Streaming NDJSON API, retrieval + recommendations, deterministic answers, fallback, prompt-injection neutralisation, body-size fix, telemetry; new panel UI.
 
-Acceptance: assistant unit tests pass; API returns correct statuses; panel answers in browser without a key. ✔ — Live Gemini path **not verified** (no key in this environment).
+Acceptance: assistant unit tests pass; API returns correct statuses; panel answers in browser without a key. ✔ — Live Gemini path verified on production after deployment. ✔
 
 ### M5 — CV · Done
 
@@ -66,8 +66,9 @@ Acceptance: Lighthouse SEO and best practices 100 on measured pages; mobile perf
 | # | Item | Why | Effort | Depends on |
 | --- | --- | --- | --- | --- |
 | 1 | **Owner review of flagged facts** (cold-store name/dates, independent title, CWA, unverified awards, PosAI naming, phone on CV) | Accuracy is priority #1 | 30 min | Owner |
-| 2 | Set Gemini credentials on Vercel and smoke-test the six example questions | Model path untested here | 30 min | Owner (secret) |
-| 3 | Deploy the branch as a Vercel preview, review on a real phone, then merge | Visual sign-off | 1 h | Owner approval |
+| 2 | ~~Set Gemini credentials on Vercel and smoke-test~~ — **Done**: key already configured; three example questions verified on production | — | — | — |
+| 3 | ~~Deploy and merge~~ — **Done**: PR #1 merged, live on production. Remaining: review the live site on a real phone | Visual sign-off | 15 min | Owner |
+| 3b | Clear the GitHub Actions billing lock | CI and the weekly metadata sync cannot run | — | Owner (billing) |
 | 4 | Add 1–2 approved screenshots per featured project (`next/image`, AVIF) | Visual proof of work | 0.5 day | Owner-approved images |
 | 5 | Shared rate-limit store (Upstash/Vercel KV) | Per-instance limits are a baseline | 0.5 day | Account choice |
 | 6 | Golden-question evaluation for the assistant in CI | Catch answer regressions when content changes | 0.5 day | #2 |
