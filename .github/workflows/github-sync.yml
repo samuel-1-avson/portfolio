@@ -1,0 +1,44 @@
+name: Refresh GitHub project metadata
+
+# Weekly, refresh last-activity dates and stars for public project repositories
+# and open a pull request when they change. The site never calls GitHub at
+# request time; it reads the committed snapshot in src/content/generated.
+on:
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run github:sync
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Open a pull request if the snapshot changed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if git diff --quiet -- src/content/generated/github.ts; then
+            echo "No changes."
+            exit 0
+          fi
+          branch="chore/github-snapshot-$(date -u +%Y%m%d)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add src/content/generated/github.ts
+          git commit -m "chore: refresh GitHub project snapshot"
+          git push -u origin "$branch"
+          gh pr create --title "chore: refresh GitHub project snapshot" --body "Automated weekly refresh of public repository metadata (last activity, stars). Review and merge to redeploy."
